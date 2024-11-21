@@ -1,3 +1,5 @@
+import BorderButton from "./BorderButton";
+
 interface RecordedContentProps {
   content: string;
   question: string;
@@ -26,26 +28,8 @@ function RecordedContent({
           {content}
         </p>
       </div>
-      <div className="inline-flex items-center justify-start gap-3 self-stretch">
-        <button
-          onClick={onRecordAgain}
-          className="bg-white border-black flex h-12 items-center justify-center gap-1 rounded border p-3"
-        >
-          <span className="text-black text-center text-base font-semibold">
-            다시 기록하기
-          </span>
-          <span>🎙️</span>
-        </button>
-        <button
-          onClick={onNextQuestion}
-          className="bg-white border-black flex h-12 grow items-center justify-center gap-1 rounded border p-3"
-        >
-          <span className="text-black text-center text-base font-semibold">
-            다음 질문으로 넘어가기
-          </span>
-          <span>➡️</span>
-        </button>
-      </div>
+      <BorderButton text="다시 기록하기 🎙️" onClick={onRecordAgain} />
+      <BorderButton text="다음 질문으로 넘어가기 ➡️" onClick={onNextQuestion} />
     </div>
   );
 }
