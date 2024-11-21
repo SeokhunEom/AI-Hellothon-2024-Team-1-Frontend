@@ -19,7 +19,7 @@ const memory = {
 function History() {
   return (
     <div>
-      <BeforeHeader />
+      <BeforeHeader to={"/"} />
       <Tabs />
       {/* <div className="absolute inset-0 flex w-full items-center justify-center text-xl font-semibold">
         아직 추억이 없네요.

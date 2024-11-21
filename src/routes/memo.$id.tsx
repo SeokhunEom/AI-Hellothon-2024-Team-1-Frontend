@@ -40,7 +40,7 @@ function Memo() {
 
   return (
     <div>
-      <BeforeHeader />
+      <BeforeHeader to={"/"} />
       <Tabs />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (

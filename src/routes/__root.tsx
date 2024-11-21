@@ -3,7 +3,9 @@ import { Outlet, createRootRoute, useMatchRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 const RootComponent = () => {
-  const isHome = useMatchRoute()({ to: "/" });
+  const isIndex = useMatchRoute()({ to: "/" });
+  const isCare = useMatchRoute()({ to: "/care" });
+  const isHome = isIndex || isCare;
 
   return (
     <div className="bg-black-7">

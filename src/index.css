@@ -31,3 +31,20 @@
   font-weight: 700;
   font-style: normal;
 }
+
+.custom-steps .ant-steps-item-process .ant-steps-item-icon {
+  background-color: #2175fd;
+  border-color: #2175fd;
+}
+
+.custom-steps .ant-steps-item-finish .ant-steps-item-icon {
+  border-color: #2175fd;
+}
+
+.custom-steps .ant-steps-item-finish .ant-steps-icon {
+  color: #2175fd;
+}
+
+.custom-steps .ant-steps-item-finish .ant-steps-item-tail::after {
+  background-color: #2175fd;
+}

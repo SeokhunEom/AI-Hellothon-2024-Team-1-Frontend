@@ -1,10 +1,14 @@
 import { Link } from "@tanstack/react-router";
 
-function BeforeHeader() {
+interface BeforeHeaderProps {
+  to: string;
+}
+
+function BeforeHeader({ to }: BeforeHeaderProps) {
   return (
     <header className="inline-flex flex-col items-start justify-start gap-4">
       <Link
-        to="/"
+        to={to}
         className="inline-flex items-center justify-center gap-1 px-2 py-1"
       >
         <span>⬅</span>
