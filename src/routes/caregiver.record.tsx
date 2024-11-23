@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { fetchQuestionTTS, sendAnswerToServer } from "../apis";
 import { useEffect, useRef, useState } from "react";
 
 import BeforeHeader from "../components/BeforeHeader";
@@ -7,7 +8,6 @@ import Loading from "../components/Loading";
 import RecordedContent from "../components/RecordedContent";
 import RecordingStatus from "../components/RecordingStatus";
 import SummaryButton from "../components/SummaryButton";
-import { sendAnswerToServer } from "../apis";
 import { useCaregiverMemoStore } from "../stores/caregiverMemoStore";
 
 export const Route = createFileRoute("/caregiver/record")({
@@ -37,6 +37,10 @@ function CaregiverRecord() {
   const [isLastQuestion, setIsLastQuestion] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentTranscript, setCurrentTranscript] = useState("");
+  const [previousTranscripts, setPreviousTranscripts] = useState("");
 
   useEffect(() => {
     resetQuestionNumber();
@@ -45,7 +49,28 @@ function CaregiverRecord() {
     if (questions.length > 0) {
       setCurrentQuestion(questions[0]);
     }
-  }, []);
+
+    if ("webkitSpeechRecognition" in window) {
+      const recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = "ko-KR";
+
+      recognition.onresult = function (event: SpeechRecognitionEvent) {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            setPreviousTranscripts((prev) => prev + transcript + " ");
+            setCurrentTranscript("");
+          } else {
+            setCurrentTranscript(transcript);
+          }
+        }
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, [recording]);
 
   useEffect(() => {
     if (currentQuestionNumber >= questions.length) {
@@ -67,6 +92,9 @@ function CaregiverRecord() {
       };
 
       mediaRecorder.start();
+      recognitionRef.current?.start();
+      setCurrentTranscript("");
+      setPreviousTranscripts("");
       setRecording(true);
       setShowRecordedContent(false);
     } catch (err) {
@@ -78,6 +106,7 @@ function CaregiverRecord() {
     if (!mediaRecorderRef.current) return;
 
     return new Promise<void>((resolve) => {
+      recognitionRef.current?.stop();
       mediaRecorderRef.current!.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/wav",
@@ -107,6 +136,35 @@ function CaregiverRecord() {
       addAnsweredQuestionId(currentQuestion?.id || 0);
     } catch (err) {
       console.error("오디오 전송 중 에러:", err);
+    }
+  };
+
+  const handleReadQuestion = async () => {
+    if (!currentQuestion?.id) return;
+
+    try {
+      const audioBlob = await fetchQuestionTTS(currentQuestion.id.toString());
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      if (audioRef.current) {
+        audioRef.current.src = audioUrl;
+        await audioRef.current.play();
+
+        audioRef.current.onended = () => {
+          URL.revokeObjectURL(audioUrl);
+        };
+      } else {
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
+        await audio.play();
+
+        audio.onended = () => {
+          URL.revokeObjectURL(audioUrl);
+        };
+      }
+    } catch (error) {
+      console.error("질문 읽기 실패:", error);
+      alert("질문을 읽을 수 없습니다.");
     }
   };
 
@@ -151,12 +209,17 @@ function CaregiverRecord() {
             questionNumber={currentQuestionNumber}
             isRecording={recording}
             isLoading={false}
-            onReadQuestion={() => {}}
+            onReadQuestion={handleReadQuestion}
             onStartRecording={startRecording}
             onEndRecording={stopRecording}
           />
         )}
-        {recording && <RecordingStatus highlightedText="" normalText="" />}
+        {recording && (
+          <RecordingStatus
+            highlightedText={previousTranscripts}
+            normalText={currentTranscript}
+          />
+        )}
         {showRecordedContent && (
           <RecordedContent
             content={recordedContent || <Loading />}

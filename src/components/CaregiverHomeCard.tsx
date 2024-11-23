@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-
 import IconFile from "../assets/iconFile.svg?react";
 import IconFileGray from "../assets/iconFileGray.svg?react";
+import { Link } from "@tanstack/react-router";
 import ReportButton from "./ReportButton";
 import { Steps } from "antd";
 
 interface CareCardProps {
+  userId: number;
   name: string;
   age: number;
   gender: string;
@@ -19,6 +19,7 @@ interface CareCardProps {
 }
 
 function CaregiverHomeCard({
+  userId,
   name,
   age,
   gender,
@@ -26,8 +27,6 @@ function CaregiverHomeCard({
   totalSessions,
   progress,
 }: CareCardProps) {
-  const navigate = useNavigate();
-
   const getCurrentStep = () => {
     if (!progress.recordPrep) return 0;
     if (!progress.materialPrep) return 1;
@@ -49,7 +48,7 @@ function CaregiverHomeCard({
             {currentSession}/{totalSessions}회차 진행중
           </div>
         </div>
-        <Link to={"/caregiver/report"} search={{ id: "1", trial: "1" }}>
+        <Link to={"/caregiver/report"} search={{ id: userId, trial: "1" }}>
           <ReportButton
             text="주간보고서"
             icon={currentSession < 3 ? <IconFileGray /> : <IconFile />}
@@ -58,37 +57,30 @@ function CaregiverHomeCard({
         </Link>
       </div>
       <div className="flex w-full flex-col justify-center">
-        <Steps
-          labelPlacement="vertical"
-          current={getCurrentStep()}
-          items={[
-            {
-              title: "기록준비",
-              description: progress.recordPrep ? "완료" : "시작전",
-              status: progress.recordPrep ? "finish" : "wait",
-              onClick: () =>
-                navigate({ to: "/caregiver/ready", search: { id: "1" } }),
-              className: "cursor-pointer",
-            },
-            {
-              title: "교안제작",
-              description: progress.materialPrep ? "완료" : "시작전",
-              status: progress.materialPrep ? "finish" : "wait",
-              onClick: () =>
-                navigate({ to: "/caregiver/create", search: { id: "1" } }),
-              className: "cursor-pointer",
-            },
-            {
-              title: "인지활동",
-              description: progress.education ? "완료" : "시작전",
-              status: progress.education ? "finish" : "wait",
-              onClick: () =>
-                navigate({ to: "/caregiver/activity", search: { id: "1" } }),
-              className: "cursor-pointer",
-            },
-          ]}
-          className="custom-steps"
-        />
+        <Link to={"/caregiver/ready"} search={{ id: userId }}>
+          <Steps
+            labelPlacement="vertical"
+            current={getCurrentStep()}
+            items={[
+              {
+                title: "기록준비",
+                description: progress.recordPrep ? "완료" : "시작전",
+                status: progress.recordPrep ? "finish" : "wait",
+              },
+              {
+                title: "교안제작",
+                description: progress.materialPrep ? "완료" : "시작전",
+                status: progress.materialPrep ? "finish" : "wait",
+              },
+              {
+                title: "인지활동",
+                description: progress.education ? "완료" : "시작전",
+                status: progress.education ? "finish" : "wait",
+              },
+            ]}
+            className="custom-steps"
+          />
+        </Link>
       </div>
     </div>
   );

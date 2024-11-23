@@ -1,50 +1,58 @@
-import { useEffect, useState } from "react";
-
 import BeforeHeader from "../components/BeforeHeader";
+import Loading from "../components/Loading";
 import ReportContent from "../components/ReportContent";
 import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../hooks/useUser";
 
 interface Analysis {
   id: number;
+  question_id: number;
   question: string;
+  first_answer_id: number;
   first_answer: string;
+  last_answer_id: number;
   last_answer: string;
   similarity: number;
+  report_id: number;
+  created_at: string;
 }
 
 interface Report {
   id: number;
   elder_id: number;
-  analyses: Analysis[];
+  year: number;
+  week_number: number;
   created_at: string;
+  analyses: Analysis[];
 }
 
 export const Route = createFileRoute("/caregiver/report")({
   component: CaregiverReport,
 });
 
+const fetchReports = async (elderId: string): Promise<Report[]> => {
+  const response = await fetch(
+    `https://fjtskwttcrchrywg.tunnel-pt.elice.io/reports/?elder_id=${elderId}&year=2024&week_number=47`,
+    {
+      method: "POST",
+    },
+  );
+  return response.json();
+};
+
 function CaregiverReport() {
-  const { trial, id = "1" }: { trial: string; id: string } = Route.useSearch();
-  const [reports, setReports] = useState<Report[]>([]);
+  const { trial, id }: { trial: string; id: string } = Route.useSearch();
   const { data: userData } = useUser(id);
+  const { data: reports = [], isLoading } = useQuery({
+    queryKey: ["reports", id],
+    queryFn: () => fetchReports(id),
+  });
 
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await fetch(
-          `https://fjtskwttcrchrywg.tunnel-pt.elice.io/reports/?elder_id=${id}&year=2024&week_number=47`,
-        );
-        const data = await response.json();
-        setReports(data);
-      } catch (error) {
-        console.error("Failed to fetch reports:", error);
-      }
-    };
-
-    fetchReports();
-  }, []);
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const currentReport = reports.find(
     (_, index) => index === parseInt(trial) - 1,

@@ -39,7 +39,7 @@ function Tabs({ title, subtitle, activeTab, items }: TabsProps) {
               <Link to={item.path} className="text-center">
                 <span
                   className={`${
-                    activeTab === item.id ? "" : "text-black-7"
+                    activeTab == item.id ? "" : "text-black-7"
                   } text-base font-semibold leading-relaxed`}
                 >
                   {item.title}
@@ -48,7 +48,7 @@ function Tabs({ title, subtitle, activeTab, items }: TabsProps) {
                 {item.subtitle && (
                   <span
                     className={`${
-                      activeTab === item.id ? "" : "text-black-7"
+                      activeTab == item.id ? "" : "text-black-7"
                     } text-base font-medium leading-relaxed`}
                   >
                     {item.subtitle}

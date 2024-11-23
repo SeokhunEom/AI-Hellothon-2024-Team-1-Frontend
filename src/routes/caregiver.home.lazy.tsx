@@ -90,6 +90,7 @@ function CaregiverHome() {
         {eldersWithProgress.map((user) => (
           <CaregiverHomeCard
             key={user.id}
+            userId={user.id}
             name={user.name}
             age={user.age}
             gender={user.gender}

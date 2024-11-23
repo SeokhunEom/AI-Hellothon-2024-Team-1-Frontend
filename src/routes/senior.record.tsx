@@ -42,6 +42,8 @@ function SeniorRecord() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentTranscript, setCurrentTranscript] = useState("");
+  const [previousTranscripts, setPreviousTranscripts] = useState("");
 
   const { isLoading, refetch } = useQuestion({
     elderId: id,
@@ -61,9 +63,33 @@ function SeniorRecord() {
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.lang = "ko-KR";
+
+      recognition.onresult = function (event: SpeechRecognitionEvent) {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            setPreviousTranscripts((prev) => prev + transcript + " ");
+            setCurrentTranscript("");
+          } else {
+            setCurrentTranscript(transcript);
+          }
+        }
+      };
+
+      recognition.onerror = function (event: SpeechRecognitionErrorEvent) {
+        console.error("음성 인식 에러:", event.error);
+      };
+
+      recognition.onend = () => {
+        if (recording) {
+          console.log("음성 인식 재시작");
+          recognition.start();
+        }
+      };
+
       recognitionRef.current = recognition;
     }
-  }, []);
+  }, [recording]);
 
   const startRecording = async () => {
     try {
@@ -79,6 +105,9 @@ function SeniorRecord() {
       };
 
       mediaRecorder.start();
+      recognitionRef.current?.start();
+      setCurrentTranscript("");
+      setPreviousTranscripts("");
       setRecording(true);
       setShowRecordedContent(false);
     } catch (err) {
@@ -90,6 +119,7 @@ function SeniorRecord() {
     if (!mediaRecorderRef.current) return;
 
     return new Promise<void>((resolve) => {
+      recognitionRef.current?.stop();
       mediaRecorderRef.current!.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/wav",
@@ -213,7 +243,12 @@ function SeniorRecord() {
             onEndRecording={handleStopRecording}
           />
         )}
-        {recording && <RecordingStatus highlightedText="" normalText="" />}
+        {recording && (
+          <RecordingStatus
+            highlightedText={previousTranscripts}
+            normalText={currentTranscript}
+          />
+        )}
         {showRecordedContent && (
           <RecordedContent
             content={recordedContent || <Loading />}
