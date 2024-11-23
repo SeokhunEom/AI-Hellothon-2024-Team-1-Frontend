@@ -4,6 +4,7 @@ import BeforeHeader from "../components/BeforeHeader";
 import ReportContent from "../components/ReportContent";
 import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
+import { useUser } from "../hooks/useUser";
 
 interface Analysis {
   id: number;
@@ -25,8 +26,9 @@ export const Route = createFileRoute("/caregiver/report")({
 });
 
 function CaregiverReport() {
-  const [reports, setReports] = useState<Report[]>([]);
   const { trial, id = "1" }: { trial: string; id: string } = Route.useSearch();
+  const [reports, setReports] = useState<Report[]>([]);
+  const { data: userData } = useUser(id);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -52,14 +54,14 @@ function CaregiverReport() {
     <div>
       <BeforeHeader to={"/caregiver/home"} />
       <Tabs
-        title="김영호"
+        title={userData?.name}
         subtitle="님 주간보고서 (24.11.18 ~ 24.11.24)"
         activeTab={trial}
         items={reports.slice(0, 3).map((_, index) => ({
           id: (index + 1).toString(),
           title: `${index + 1}회차`,
           subtitle: `${new Date(reports[index].created_at).getMonth() + 1}.${new Date(reports[index].created_at).getDate()}`,
-          path: `?trial=${index + 1}`,
+          path: `?trial=${index + 1}&id=${id}`,
         }))}
       />
       <div className="mt-6 flex flex-col gap-5">

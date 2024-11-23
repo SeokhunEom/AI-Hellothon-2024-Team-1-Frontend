@@ -13,6 +13,7 @@ interface CaregiverReadyCardProps {
   isRecommended?: boolean;
   content: string;
   image: string;
+  userId: string;
 }
 
 const CaregiverReadyCard = ({
@@ -22,6 +23,7 @@ const CaregiverReadyCard = ({
   isRecommended,
   content,
   image,
+  userId,
 }: CaregiverReadyCardProps) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,7 +75,10 @@ const CaregiverReadyCard = ({
             text="교안 만들기"
             icon={<IconFilePlus />}
             onClick={() =>
-              navigate({ to: "/caregiver/create", search: { id: recordId } })
+              navigate({
+                to: "/caregiver/create",
+                search: { id: recordId, userId },
+              })
             }
           />
         </div>

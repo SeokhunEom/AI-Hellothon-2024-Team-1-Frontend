@@ -6,6 +6,7 @@ import CaregiverReadyCard from "../components/CaregiverReadyCard";
 import { RecordResponse } from "../types";
 import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
+import { useUser } from "../hooks/useUser";
 
 export const Route = createFileRoute("/caregiver/ready")({
   component: CaregiverReady,
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/caregiver/ready")({
 function CaregiverReady() {
   const { id }: { id: string } = Route.useSearch();
   const [records, setRecords] = useState<RecordResponse[]>([]);
+  const { data: userData } = useUser(id);
 
   useEffect(() => {
     fetchRecords();
@@ -35,7 +37,7 @@ function CaregiverReady() {
     <div>
       <BeforeHeader to={"/caregiver/home"} />
       <Tabs
-        title="김영호"
+        title={userData?.name}
         subtitle="님"
         activeTab="1"
         items={CAREGIVER_TABS.map((tab) => ({
@@ -48,6 +50,7 @@ function CaregiverReady() {
             key={record.id}
             recordId={String(record.id)}
             title={record.title}
+            userId={String(record.elder_id)}
             tags={record.keywords.slice(0, 3)}
             content={record.content}
             image={`https://fjtskwttcrchrywg.tunnel-pt.elice.io${record.image}`}

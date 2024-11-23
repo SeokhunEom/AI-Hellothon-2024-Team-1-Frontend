@@ -7,7 +7,9 @@ import EduCard from "../components/EduCard";
 import IconChevron from "../assets/iconChevron.svg?react";
 import { Question } from "../types";
 import Tabs from "../components/Tabs";
+import { useCaregiverMemoStore } from "../stores/caregiverMemoStore";
 import { useQuery } from "@tanstack/react-query";
+import { useUser } from "../hooks/useUser";
 
 export const Route = createFileRoute("/caregiver/activity")({
   component: CaregiverActivity,
@@ -24,7 +26,9 @@ const fetchQuestions = async (id: string): Promise<Question[]> => {
 };
 
 function CaregiverActivity() {
-  const { id }: { id: string } = Route.useSearch();
+  const { id, userId }: { id: string; userId: string } = Route.useSearch();
+  const { data: userData } = useUser(userId);
+  const { setQuestions } = useCaregiverMemoStore();
 
   const {
     data: questions = [],
@@ -35,6 +39,10 @@ function CaregiverActivity() {
     queryFn: () => fetchQuestions(id),
   });
 
+  const handleStartActivity = () => {
+    setQuestions(questions);
+  };
+
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>에러가 발생했습니다</div>;
 
@@ -42,7 +50,7 @@ function CaregiverActivity() {
     <div>
       <BeforeHeader to={"/caregiver/home"} />
       <Tabs
-        title="김영호"
+        title={userData?.name}
         subtitle="님"
         activeTab="3"
         items={CAREGIVER_TABS.map((tab) => ({
@@ -50,7 +58,11 @@ function CaregiverActivity() {
         }))}
       />
       <div className="mt-6 flex flex-col gap-5">
-        <Link to={`/caregiver/record`} search={{ id }}>
+        <Link
+          to={`/caregiver/record`}
+          search={{ id, userId }}
+          onClick={handleStartActivity}
+        >
           <BorderButton
             text="인지활동 시작하기"
             icon={<IconChevron />}

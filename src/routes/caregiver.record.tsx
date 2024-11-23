@@ -1,79 +1,175 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+
 import BeforeHeader from "../components/BeforeHeader";
 import CareQuestionCard from "../components/CareQuestionCard";
+import Loading from "../components/Loading";
 import RecordedContent from "../components/RecordedContent";
 import RecordingStatus from "../components/RecordingStatus";
 import SummaryButton from "../components/SummaryButton";
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { sendAnswerToServer } from "../apis";
+import { useCaregiverMemoStore } from "../stores/caregiverMemoStore";
 
 export const Route = createFileRoute("/caregiver/record")({
   component: CaregiverRecord,
 });
 
 function CaregiverRecord() {
-  const { id }: { id: string } = Route.useSearch();
+  const navigate = useNavigate();
+  const {
+    questions,
+    currentQuestion,
+    setCurrentQuestion,
+    addAnswer,
+    resetAnswers,
+    addAnsweredQuestionId,
+    answeredQuestionIds,
+    clearAnsweredQuestionIds,
+    currentQuestionNumber,
+    incrementQuestionNumber,
+    resetQuestionNumber,
+  } = useCaregiverMemoStore();
+
+  const { id, userId }: { id: string; userId: string } = Route.useSearch();
   const [recording, setRecording] = useState(false);
   const [recordedContent, setRecordedContent] = useState("");
   const [showRecordedContent, setShowRecordedContent] = useState(false);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
-  const question =
-    "오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 것은 무엇인가요? 질문이 길어진면 내용이 어떻게 들어가나요?";
+  useEffect(() => {
+    resetQuestionNumber();
+    resetAnswers();
+    clearAnsweredQuestionIds();
+    if (questions.length > 0) {
+      setCurrentQuestion(questions[0]);
+    }
+  }, []);
 
-  const handleStartRecording = () => {
-    setRecording(true);
+  useEffect(() => {
+    if (currentQuestionNumber >= questions.length) {
+      setIsLastQuestion(true);
+    }
+  }, [currentQuestionNumber, questions.length]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.start();
+      setRecording(true);
+      setShowRecordedContent(false);
+    } catch (err) {
+      console.error("음성 녹음 시작 실패:", err);
+    }
+  };
+
+  const stopRecording = async () => {
+    if (!mediaRecorderRef.current) return;
+
+    return new Promise<void>((resolve) => {
+      mediaRecorderRef.current!.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/wav",
+        });
+        await sendAudioToServer(audioBlob);
+        resolve();
+      };
+
+      mediaRecorderRef.current!.stop();
+      mediaRecorderRef
+        .current!.stream.getTracks()
+        .forEach((track) => track.stop());
+      setRecording(false);
+      setShowRecordedContent(true);
+    });
+  };
+
+  const sendAudioToServer = async (audioBlob: Blob) => {
+    try {
+      const result = await sendAnswerToServer(
+        audioBlob,
+        userId,
+        currentQuestion?.id?.toString() || "1",
+      );
+      setRecordedContent(result.response);
+      addAnswer(result);
+      addAnsweredQuestionId(currentQuestion?.id || 0);
+    } catch (err) {
+      console.error("오디오 전송 중 에러:", err);
+    }
+  };
+
+  const handleNextQuestion = () => {
+    incrementQuestionNumber();
+    if (currentQuestionNumber < questions.length) {
+      setCurrentQuestion(questions[currentQuestionNumber]);
+    }
     setShowRecordedContent(false);
+    setRecordedContent("");
   };
 
-  const handleStopRecording = () => {
-    setRecordedContent(
-      "오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 색은 노란색입니다. 그 중에서도 무슨 색이 제일 좋았냐면은.... 오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 색은 노란색입니다. 그 중에서도 무슨 색이 제일 좋았냐면은.... 중 가장 아름다웠던 색은 노란색입니다. 그 중에서도 무슨 색이 제일 좋았냐면은....",
-    );
-    setRecording(false);
-    setShowRecordedContent(true);
-    setIsLastQuestion(true);
+  const handleFinishActivity = async () => {
+    try {
+      await fetch(
+        `https://fjtskwttcrchrywg.tunnel-pt.elice.io/guides/finish/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ answeredQuestionIds }),
+        },
+      );
+      navigate({ to: "/caregiver/home" });
+    } catch (error) {
+      console.error("기록 생성 중 에러:", error);
+      alert("기록 생성에 실패했습니다.");
+    }
   };
-
-  const handleReadQuestion = () => alert("질문 읽어주기");
-  const handleRecordAgain = () => setShowRecordedContent(false);
-  const handleNextQuestion = () => alert("다음 질문으로 이동");
 
   return (
     <div>
       <BeforeHeader
-        to={`/caregiver/activity?id=${id}`}
-        text="뒤로가기"
+        to={`/caregiver/activity?id=${id}&userId=${userId}`}
         isModalActive
       />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (
           <CareQuestionCard
-            question={question}
+            question={currentQuestion?.text || ""}
+            questionNumber={currentQuestionNumber}
             isRecording={recording}
-            onReadQuestion={handleReadQuestion}
-            onStartRecording={handleStartRecording}
-            onEndRecording={handleStopRecording}
+            isLoading={false}
+            onReadQuestion={() => {}}
+            onStartRecording={startRecording}
+            onEndRecording={stopRecording}
           />
         )}
-        {recording && (
-          <RecordingStatus
-            highlightedText="오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 색은 노란색입니다. 그 중에서도 무슨"
-            normalText="색이 제일 좋았냐면은...."
-          />
-        )}
+        {recording && <RecordingStatus highlightedText="" normalText="" />}
         {showRecordedContent && (
           <RecordedContent
-            content={recordedContent}
-            question={question}
-            questionNumber={1}
+            content={recordedContent || <Loading />}
+            question={currentQuestion?.text || ""}
+            questionNumber={currentQuestionNumber}
             isLastQuestion={isLastQuestion}
             isSam={false}
-            onRecordAgain={handleRecordAgain}
+            onRecordAgain={() => setShowRecordedContent(false)}
             onNextQuestion={handleNextQuestion}
           />
         )}
-        {isLastQuestion && (
-          <SummaryButton onClick={() => alert("오늘 교육 끝내기")} />
+        {isLastQuestion && showRecordedContent && (
+          <SummaryButton onClick={handleFinishActivity} />
         )}
       </div>
     </div>

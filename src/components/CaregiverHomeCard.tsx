@@ -49,11 +49,11 @@ function CaregiverHomeCard({
             {currentSession}/{totalSessions}회차 진행중
           </div>
         </div>
-        <Link to={"/caregiver/report"} search={{ id: "1" }}>
+        <Link to={"/caregiver/report"} search={{ id: "1", trial: "1" }}>
           <ReportButton
             text="주간보고서"
-            icon={currentSession !== 3 ? <IconFileGray /> : <IconFile />}
-            disabled={currentSession !== 3 || getCurrentStep() !== 3}
+            icon={currentSession < 3 ? <IconFileGray /> : <IconFile />}
+            disabled={currentSession < 3 || getCurrentStep() !== 3}
           />
         </Link>
       </div>

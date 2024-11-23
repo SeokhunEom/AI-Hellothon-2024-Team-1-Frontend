@@ -21,6 +21,7 @@ interface TaskResponse {
   created_at: string;
   year: number;
   week_number: number;
+  iteration: number;
 }
 
 const getAllElders = async () => {
@@ -77,6 +78,7 @@ function CaregiverHome() {
         materialPrep: elderTask.status >= 2,
         education: elderTask.status >= 3,
       },
+      currentSession: elderTask.iteration,
     };
   });
 

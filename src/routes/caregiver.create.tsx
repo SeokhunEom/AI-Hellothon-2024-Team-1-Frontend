@@ -12,17 +12,19 @@ import { Question } from "../types";
 import Tabs from "../components/Tabs";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useUser } from "../hooks/useUser";
 
 export const Route = createFileRoute("/caregiver/create")({
   component: CaregiverCreate,
 });
 
 function CaregiverCreate() {
-  const { id }: { id: string } = Route.useSearch();
+  const { id, userId }: { id: string; userId: string } = Route.useSearch();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
+  const { data: userData } = useUser(userId);
 
   const {
     data: questions,
@@ -105,7 +107,7 @@ function CaregiverCreate() {
       const data = await response.json();
       navigate({
         to: "/caregiver/activity",
-        search: { id: data.id.toString() },
+        search: { id: data.id.toString(), userId },
       });
     } catch (error) {
       console.error("Error creating guide:", error);
@@ -121,7 +123,7 @@ function CaregiverCreate() {
     <div>
       <BeforeHeader to={"/caregiver/home"} />
       <Tabs
-        title="김영호"
+        title={userData?.name}
         subtitle="님"
         activeTab="2"
         items={CAREGIVER_TABS.map((tab) => ({
