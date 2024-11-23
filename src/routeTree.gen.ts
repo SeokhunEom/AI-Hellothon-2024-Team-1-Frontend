@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ReadyIdImport } from './routes/ready.$id'
+import { Route as MemooIdImport } from './routes/memoo.$id'
 import { Route as MemoIdImport } from './routes/memo.$id'
 import { Route as MakeIdImport } from './routes/make.$id'
 import { Route as HistoryIdImport } from './routes/history.$id'
@@ -41,6 +42,12 @@ const IndexLazyRoute = IndexLazyImport.update({
 const ReadyIdRoute = ReadyIdImport.update({
   id: '/ready/$id',
   path: '/ready/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MemooIdRoute = MemooIdImport.update({
+  id: '/memoo/$id',
+  path: '/memoo/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -114,6 +121,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MemoIdImport
       parentRoute: typeof rootRoute
     }
+    '/memoo/$id': {
+      id: '/memoo/$id'
+      path: '/memoo/$id'
+      fullPath: '/memoo/$id'
+      preLoaderRoute: typeof MemooIdImport
+      parentRoute: typeof rootRoute
+    }
     '/ready/$id': {
       id: '/ready/$id'
       path: '/ready/$id'
@@ -133,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/history/$id': typeof HistoryIdRoute
   '/make/$id': typeof MakeIdRoute
   '/memo/$id': typeof MemoIdRoute
+  '/memoo/$id': typeof MemooIdRoute
   '/ready/$id': typeof ReadyIdRoute
 }
 
@@ -143,6 +158,7 @@ export interface FileRoutesByTo {
   '/history/$id': typeof HistoryIdRoute
   '/make/$id': typeof MakeIdRoute
   '/memo/$id': typeof MemoIdRoute
+  '/memoo/$id': typeof MemooIdRoute
   '/ready/$id': typeof ReadyIdRoute
 }
 
@@ -154,6 +170,7 @@ export interface FileRoutesById {
   '/history/$id': typeof HistoryIdRoute
   '/make/$id': typeof MakeIdRoute
   '/memo/$id': typeof MemoIdRoute
+  '/memoo/$id': typeof MemooIdRoute
   '/ready/$id': typeof ReadyIdRoute
 }
 
@@ -166,6 +183,7 @@ export interface FileRouteTypes {
     | '/history/$id'
     | '/make/$id'
     | '/memo/$id'
+    | '/memoo/$id'
     | '/ready/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -175,6 +193,7 @@ export interface FileRouteTypes {
     | '/history/$id'
     | '/make/$id'
     | '/memo/$id'
+    | '/memoo/$id'
     | '/ready/$id'
   id:
     | '__root__'
@@ -184,6 +203,7 @@ export interface FileRouteTypes {
     | '/history/$id'
     | '/make/$id'
     | '/memo/$id'
+    | '/memoo/$id'
     | '/ready/$id'
   fileRoutesById: FileRoutesById
 }
@@ -195,6 +215,7 @@ export interface RootRouteChildren {
   HistoryIdRoute: typeof HistoryIdRoute
   MakeIdRoute: typeof MakeIdRoute
   MemoIdRoute: typeof MemoIdRoute
+  MemooIdRoute: typeof MemooIdRoute
   ReadyIdRoute: typeof ReadyIdRoute
 }
 
@@ -205,6 +226,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryIdRoute: HistoryIdRoute,
   MakeIdRoute: MakeIdRoute,
   MemoIdRoute: MemoIdRoute,
+  MemooIdRoute: MemooIdRoute,
   ReadyIdRoute: ReadyIdRoute,
 }
 
@@ -224,6 +246,7 @@ export const routeTree = rootRoute
         "/history/$id",
         "/make/$id",
         "/memo/$id",
+        "/memoo/$id",
         "/ready/$id"
       ]
     },
@@ -244,6 +267,9 @@ export const routeTree = rootRoute
     },
     "/memo/$id": {
       "filePath": "memo.$id.tsx"
+    },
+    "/memoo/$id": {
+      "filePath": "memoo.$id.tsx"
     },
     "/ready/$id": {
       "filePath": "ready.$id.tsx"

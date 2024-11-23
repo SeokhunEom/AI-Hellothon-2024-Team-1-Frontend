@@ -1,13 +1,13 @@
 import BeforeHeader from "../components/BeforeHeader";
-import MemoFinishButton from "../components/MemoFinishButton";
-import QuestionCard from "../components/QuestionCard";
+import CareQuestionCard from "../components/CareQuestionCard";
 import RecordedContent from "../components/RecordedContent";
 import RecordingStatus from "../components/RecordingStatus";
+import SummaryButton from "../components/SummaryButton";
 import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createFileRoute("/memo/$id")({
+export const Route = createFileRoute("/memoo/$id")({
   component: Memo,
 });
 
@@ -34,7 +34,6 @@ function Memo() {
     setIsLastQuestion(true);
   };
 
-  const handleRefreshQuestion = () => alert("다른 질문 만들어주기");
   const handleReadQuestion = () => alert("질문 읽어주기");
   const handleRecordAgain = () => setShowRecordedContent(false);
   const handleNextQuestion = () => alert("다음 질문으로 이동");
@@ -45,10 +44,9 @@ function Memo() {
       <Tabs />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (
-          <QuestionCard
+          <CareQuestionCard
             question={question}
             isRecording={recording}
-            onRefreshQuestion={handleRefreshQuestion}
             onReadQuestion={handleReadQuestion}
             onStartRecording={handleStartRecording}
             onEndRecording={handleStopRecording}
@@ -69,7 +67,7 @@ function Memo() {
           />
         )}
         {isLastQuestion && (
-          <MemoFinishButton onClick={() => alert("오늘 교육 끝내기")} />
+          <SummaryButton onClick={() => alert("오늘 교육 끝내기")} />
         )}
       </div>
     </div>

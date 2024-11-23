@@ -1,3 +1,5 @@
+import IconDots from "../assets/iconDots.svg?react";
+
 interface RecordingStatusProps {
   highlightedText: string;
   normalText: string;
@@ -8,10 +10,10 @@ const RecordingStatus = ({
   normalText,
 }: RecordingStatusProps) => {
   return (
-    <div className="bg-neutral-100 inline-flex h-[262px] flex-col items-center justify-start gap-8 rounded-xl p-5">
+    <div className="inline-flex flex-col items-center justify-start gap-8 rounded-xl bg-black-3 p-5">
       <div className="flex h-44 flex-col items-center justify-center gap-4 self-stretch">
         <div className="flex flex-col items-center justify-start gap-1">
-          <div className="relative h-6 w-6" />
+          <IconDots />
           <div className="text-black text-lg font-bold">기록중입니다</div>
         </div>
         <div className="self-stretch text-center">

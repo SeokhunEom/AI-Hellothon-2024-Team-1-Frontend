@@ -1,4 +1,6 @@
 import BorderButton from "./BorderButton";
+import IconArrowSquareRight from "../assets/iconArrowSquareRight.svg?react";
+import IconMic from "../assets/iconMic.svg?react";
 
 interface RecordedContentProps {
   content: string;
@@ -28,8 +30,18 @@ function RecordedContent({
           {content}
         </p>
       </div>
-      <BorderButton text="다시 기록하기 🎙️" onClick={onRecordAgain} />
-      <BorderButton text="다음 질문으로 넘어가기 ➡️" onClick={onNextQuestion} />
+      <BorderButton
+        className="w-full"
+        text="다시 기록하기"
+        onClick={onRecordAgain}
+        icon={<IconMic />}
+      />
+      <BorderButton
+        className="w-full"
+        text="다음 질문으로 넘어가기"
+        onClick={onNextQuestion}
+        icon={<IconArrowSquareRight />}
+      />
     </div>
   );
 }
