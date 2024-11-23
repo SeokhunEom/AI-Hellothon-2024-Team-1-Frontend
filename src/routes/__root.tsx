@@ -1,4 +1,9 @@
-import { Outlet, createRootRoute, useMatchRoute } from "@tanstack/react-router";
+import {
+  Outlet,
+  ScrollRestoration,
+  createRootRoute,
+  useMatchRoute,
+} from "@tanstack/react-router";
 
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
@@ -12,6 +17,7 @@ const RootComponent = () => {
       <div
         className={`m-auto min-h-screen max-w-[500px] ${isHome ? "bg-black-3" : "bg-black-1"} px-5 py-16`}
       >
+        <ScrollRestoration />
         <Outlet />
         <TanStackRouterDevtools />
       </div>

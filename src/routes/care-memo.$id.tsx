@@ -63,6 +63,7 @@ function CareMemo() {
             question={question}
             onRecordAgain={handleRecordAgain}
             onNextQuestion={handleNextQuestion}
+            isLastQuestion={isLastQuestion}
           />
         )}
         {isLastQuestion && (

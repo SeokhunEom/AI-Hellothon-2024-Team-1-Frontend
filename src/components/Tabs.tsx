@@ -1,33 +1,62 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
-const TABS = [
-  { path: "/memo", label: "기록하기" },
-  { path: "/history", label: "나의추억" },
-] as const;
+interface TabItem {
+  id: string;
+  title?: string;
+  subtitle?: string;
+  path: string;
+}
 
-function Tabs() {
-  const router = useRouter();
-  const currentPath = router.state.location.pathname;
+interface TabsProps {
+  title?: string;
+  subtitle?: string;
+  activeTab: string;
+  items: TabItem[];
+}
 
-  const getTabStyles = (path: string) => {
-    const isActive = currentPath.startsWith(path);
-    return `p-2 text-2xl font-semibold border-b-2 ${
-      isActive ? "border-black-13 text-black-13" : "border-black-1 text-black-7"
-    }`;
-  };
-
+function Tabs({ title, subtitle, activeTab, items }: TabsProps) {
   return (
-    <div className="mt-4 flex items-center justify-start gap-3">
-      {TABS.map((tab) => (
-        <Link
-          key={tab.path}
-          to={`${tab.path}/$id`}
-          params={{ id: "123" }}
-          className={getTabStyles(tab.path)}
-        >
-          {tab.label}
-        </Link>
-      ))}
+    <div className="flex flex-col items-center justify-center gap-3">
+      {title && (
+        <div>
+          <span className="text-2xl font-semibold leading-loose">{title}</span>
+          <span className="text-lg font-semibold leading-loose">
+            {subtitle}
+          </span>
+        </div>
+      )}
+      <div className="inline-flex items-center justify-start self-stretch">
+        {items.map((item) => (
+          <div
+            key={item.id}
+            className={`shrink grow basis-0 p-2 ${
+              activeTab === item.id
+                ? "border-b-2 border-black-13"
+                : "border-b-2 border-black-1"
+            } flex items-center justify-center`}
+          >
+            <Link to={item.path} className="text-center">
+              <span
+                className={`${
+                  activeTab === item.id ? "" : "text-black-7"
+                } text-base font-semibold leading-relaxed`}
+              >
+                {item.title}
+                <br />
+              </span>
+              {item.subtitle && (
+                <span
+                  className={`${
+                    activeTab === item.id ? "" : "text-black-7"
+                  } text-base font-medium leading-relaxed`}
+                >
+                  {item.subtitle}
+                </span>
+              )}
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

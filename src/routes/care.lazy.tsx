@@ -1,8 +1,7 @@
-import { Link, createLazyFileRoute } from "@tanstack/react-router";
-
 import CareCard from "../components/CareCard";
 import Date from "../components/Date";
 import Header from "../components/Header";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/care")({
   component: Care,
@@ -73,16 +72,14 @@ function Care() {
       <main className="flex flex-col items-end gap-6">
         <Date startDate="24.11.18" endDate="24.11.24" />
         {mockUser.map((user) => (
-          <Link className="w-full" to={`/ready/${user.id}`}>
-            <CareCard
-              name={user.name}
-              age={user.age}
-              gender={user.gender}
-              currentSession={user.currentSession}
-              totalSessions={user.totalSessions}
-              progress={user.progress}
-            />
-          </Link>
+          <CareCard
+            name={user.name}
+            age={user.age}
+            gender={user.gender}
+            currentSession={user.currentSession}
+            totalSessions={user.totalSessions}
+            progress={user.progress}
+          />
         ))}
       </main>
     </div>

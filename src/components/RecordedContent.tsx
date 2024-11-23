@@ -5,6 +5,7 @@ import IconMic from "../assets/iconMic.svg?react";
 interface RecordedContentProps {
   content: string;
   question: string;
+  isLastQuestion?: boolean;
   onRecordAgain: () => void;
   onNextQuestion: () => void;
 }
@@ -12,6 +13,7 @@ interface RecordedContentProps {
 function RecordedContent({
   content,
   question,
+  isLastQuestion,
   onRecordAgain,
   onNextQuestion,
 }: RecordedContentProps) {
@@ -36,12 +38,14 @@ function RecordedContent({
         onClick={onRecordAgain}
         icon={<IconMic />}
       />
-      <BorderButton
-        className="w-full"
-        text="다음 질문으로 넘어가기"
-        onClick={onNextQuestion}
-        icon={<IconArrowSquareRight />}
-      />
+      {!isLastQuestion && (
+        <BorderButton
+          className="w-full"
+          text="다음 질문으로 넘어가기"
+          onClick={onNextQuestion}
+          icon={<IconArrowSquareRight />}
+        />
+      )}
     </div>
   );
 }

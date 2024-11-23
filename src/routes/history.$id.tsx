@@ -20,7 +20,13 @@ function History() {
   return (
     <div>
       <BeforeHeader to={"/"} />
-      <Tabs />
+      <Tabs
+        activeTab="2"
+        items={[
+          { id: "1", title: "기록하기", path: "/memo/1" },
+          { id: "2", title: "나의추억", path: "/history/1" },
+        ]}
+      />
       {/* <div className="absolute inset-0 flex w-full items-center justify-center text-xl font-semibold">
         아직 추억이 없네요.
       </div> */}

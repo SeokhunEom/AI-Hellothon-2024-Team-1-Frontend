@@ -1,6 +1,7 @@
+import { Link, useNavigate } from "@tanstack/react-router";
+
 import IconFile from "../assets/iconFile.svg?react";
 import IconFileGray from "../assets/iconFileGray.svg?react";
-import { Link } from "@tanstack/react-router";
 import ReportButton from "./ReportButton";
 import { Steps } from "antd";
 
@@ -25,6 +26,8 @@ function CareCard({
   totalSessions,
   progress,
 }: CareCardProps) {
+  const navigate = useNavigate();
+
   const getCurrentStep = () => {
     if (!progress.recordPrep) return 0;
     if (!progress.materialPrep) return 1;
@@ -50,7 +53,7 @@ function CareCard({
           <ReportButton
             text="주간보고서"
             icon={currentSession !== 3 ? <IconFileGray /> : <IconFile />}
-            disabled={currentSession !== 3}
+            disabled={currentSession !== 3 || getCurrentStep() !== 3}
           />
         </Link>
       </div>
@@ -63,16 +66,23 @@ function CareCard({
               title: "기록준비",
               description: progress.recordPrep ? "완료" : "시작전",
               status: progress.recordPrep ? "finish" : "wait",
+              onClick: () =>
+                navigate({ to: "/ready/$id", params: { id: "1" } }),
+              className: "cursor-pointer",
             },
             {
               title: "교안제작",
               description: progress.materialPrep ? "완료" : "시작전",
               status: progress.materialPrep ? "finish" : "wait",
+              onClick: () => navigate({ to: "/make/$id", params: { id: "1" } }),
+              className: "cursor-pointer",
             },
             {
-              title: "인지교육",
+              title: "인지활동",
               description: progress.education ? "완료" : "시작전",
               status: progress.education ? "finish" : "wait",
+              onClick: () => navigate({ to: "/edu/$id", params: { id: "1" } }),
+              className: "cursor-pointer",
             },
           ]}
           className="custom-steps"

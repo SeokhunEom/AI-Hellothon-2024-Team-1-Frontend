@@ -6,14 +6,23 @@ interface EduCardProps {
 
 const EduCard = ({ questionNumber, question, answer }: EduCardProps) => {
   return (
-    <div className="inline-flex items-start justify-end gap-4 rounded-xl bg-black-3 p-5">
-      <div className="inline-flex flex-1 flex-col items-start justify-start gap-4">
-        <div className="text-black self-stretch text-base font-semibold">
-          질문{questionNumber}. <br />
-          {question}
+    <div className="inline-flex flex-col items-start justify-start gap-5">
+      <div className="flex flex-col items-start justify-center gap-6 self-stretch rounded-xl bg-black-3 px-6 py-5">
+        <div className="flex flex-col items-start justify-center gap-2 self-stretch">
+          <div className="self-stretch text-lg font-medium">
+            질문 {questionNumber}.
+            <br />
+            {question}
+          </div>
         </div>
-        <div className="text-black self-stretch text-sm font-medium">
-          {answer}
+        <div className="flex flex-col items-start justify-center gap-2 self-stretch">
+          <div>
+            <span className="text-base font-bold text-blue-highlight">샘</span>
+            <span className="text-base font-bold">에서 기록한 내용</span>
+          </div>
+          <div className="self-stretch text-base font-normal leading-relaxed">
+            {answer}
+          </div>
         </div>
       </div>
     </div>

@@ -2,9 +2,9 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 
 import BeforeHeader from "../components/BeforeHeader";
 import BorderButton from "../components/BorderButton";
-import { CareTabs } from "../components/CareTabs";
 import EduCard from "../components/EduCard";
 import IconChevron from "../assets/iconChevron.svg?react";
+import Tabs from "../components/Tabs";
 
 export const Route = createFileRoute("/edu/$id")({
   component: Edu,
@@ -16,11 +16,20 @@ function Edu() {
   return (
     <div>
       <BeforeHeader to={"/care"} />
-      <CareTabs activeTab="education" />
+      <Tabs
+        title="김영호"
+        subtitle="님"
+        activeTab="3"
+        items={[
+          { id: "1", title: "기록준비", path: "/ready/1" },
+          { id: "2", title: "교안제작", path: "/make/1" },
+          { id: "3", title: "인지활동", path: "/edu/1" },
+        ]}
+      />
       <div className="mt-6 flex flex-col gap-5">
         <Link to={`/care-memo/$id`} params={{ id }}>
           <BorderButton
-            text="인지교육 시작 하기"
+            text="인지활동 시작 하기"
             icon={<IconChevron />}
             className="w-full"
           />

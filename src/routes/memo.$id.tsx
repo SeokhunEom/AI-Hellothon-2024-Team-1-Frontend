@@ -45,7 +45,13 @@ function Memo() {
   return (
     <div>
       <BeforeHeader to={"/"} isModalActive={true} />
-      <Tabs />
+      <Tabs
+        activeTab="1"
+        items={[
+          { id: "1", title: "기록하기", path: "/memo/1" },
+          { id: "2", title: "나의추억", path: "/history/1" },
+        ]}
+      />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (
           <QuestionCard
