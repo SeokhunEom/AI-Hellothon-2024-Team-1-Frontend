@@ -1,11 +1,11 @@
 interface MemoryCardProps {
   date?: string;
   title: string;
-  imageSrc: string;
+  image: string;
   description: string;
 }
 
-function MemoryCard({ date, title, imageSrc, description }: MemoryCardProps) {
+function MemoryCard({ date, title, image, description }: MemoryCardProps) {
   return (
     <div className="flex w-full flex-col items-center gap-6 bg-black-1 py-6">
       <div className="flex w-full flex-col gap-2">
@@ -16,11 +16,7 @@ function MemoryCard({ date, title, imageSrc, description }: MemoryCardProps) {
         )}
         <div className="text-xl font-semibold">{title}</div>
       </div>
-      <img
-        className="ma h-80 w-full object-cover"
-        src={imageSrc}
-        alt="Memory"
-      />
+      <img className="ma h-80 w-full object-cover" src={image} alt="Memory" />
       <p className="text-lg font-medium leading-8">{description}</p>
     </div>
   );

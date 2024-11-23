@@ -5,6 +5,7 @@ import IconRefresh from "../assets/iconRefresh.svg?react";
 import IconVolume from "../assets/iconVolume.svg?react";
 
 interface QuestionCardProps {
+  questionNumber: number;
   question: string;
   isRecording: boolean;
   onRefreshQuestion: () => void;
@@ -14,6 +15,7 @@ interface QuestionCardProps {
 }
 
 function QuestionCard({
+  questionNumber,
   question,
   isRecording,
   onRefreshQuestion,
@@ -23,7 +25,7 @@ function QuestionCard({
 }: QuestionCardProps) {
   return (
     <div className="flex flex-col gap-4 rounded-xl bg-yellow-main px-6 py-5">
-      <p className="text-center text-lg font-bold">질문 1</p>
+      <p className="text-center text-lg font-bold">질문 {questionNumber}</p>
       <p className="text-center text-xl">{question}</p>
       <div className="flex flex-col items-center justify-center gap-3 px-8">
         <div className="flex w-full gap-4">

@@ -10,15 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.61.0",
+    "@tanstack/react-query-devtools": "^5.61.0",
     "@tanstack/react-router": "^1.82.1",
     "antd": "^5.22.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@tanstack/eslint-plugin-query": "^5.60.1",
     "@tanstack/router-devtools": "^1.82.1",
     "@tanstack/router-plugin": "^1.81.9",
+    "@types/dom-speech-recognition": "^0.0.4",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^3.5.0",

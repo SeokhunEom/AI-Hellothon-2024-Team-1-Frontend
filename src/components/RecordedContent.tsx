@@ -5,6 +5,7 @@ import IconMic from "../assets/iconMic.svg?react";
 interface RecordedContentProps {
   content: string;
   question: string;
+  questionNumber: number;
   isLastQuestion?: boolean;
   isSam?: boolean;
   onRecordAgain: () => void;
@@ -14,6 +15,7 @@ interface RecordedContentProps {
 function RecordedContent({
   content,
   question,
+  questionNumber,
   isLastQuestion,
   isSam,
   onRecordAgain,
@@ -24,7 +26,7 @@ function RecordedContent({
       <div className="flex flex-col items-center justify-start gap-5 self-stretch rounded-xl bg-yellow-sub px-6 py-5">
         <div className="flex flex-col items-start justify-center gap-1 self-stretch">
           <p className="text-black text-lg font-bold">
-            질문 1 - 기록된 내용입니다.
+            질문 {questionNumber} - 기록된 내용입니다.
           </p>
           <p className="text-black self-stretch text-base font-medium leading-7">
             {question}
