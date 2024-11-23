@@ -5,9 +5,14 @@ import { useNavigate } from "@tanstack/react-router";
 interface BeforeHeaderProps {
   isModalActive?: boolean;
   to: string;
+  text?: string;
 }
 
-function BeforeHeader({ isModalActive = false, to }: BeforeHeaderProps) {
+function BeforeHeader({
+  isModalActive = false,
+  to,
+  text = "메인화면으로 돌아가기",
+}: BeforeHeaderProps) {
   const navigate = useNavigate();
 
   const handleBackClick = (e: React.MouseEvent) => {
@@ -33,7 +38,7 @@ function BeforeHeader({ isModalActive = false, to }: BeforeHeaderProps) {
       >
         <IconArrowLeft />
         <span className="p-2 text-center text-base font-medium leading-loose">
-          메인화면으로 돌아가기
+          {text}
         </span>
       </button>
     </header>

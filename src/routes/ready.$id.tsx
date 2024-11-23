@@ -17,11 +17,20 @@ function Ready() {
           title="오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다."
           tags={["꽃놀이", "정숙이", "오대산"]}
           isSelected={true}
+          isRecommended={true}
           isDisabled={true}
         />
         <ReadyCard
           title="오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다."
           tags={["꽃놀이", "정숙이", "오대산"]}
+          isSelected={false}
+          isRecommended={true}
+          isDisabled={true}
+        />
+        <ReadyCard
+          title="오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다."
+          tags={["꽃놀이", "정숙이", "오대산"]}
+          isSelected={false}
         />
       </div>
     </div>

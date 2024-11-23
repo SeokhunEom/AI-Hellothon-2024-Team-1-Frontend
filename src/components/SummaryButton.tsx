@@ -1,3 +1,5 @@
+import IconArrowCircleRight from "../assets/iconArrowCircleRight.svg?react";
+
 interface SummaryButtonProps {
   onClick: () => void;
 }
@@ -12,6 +14,7 @@ function SummaryButton({ onClick }: SummaryButtonProps) {
         <span className="text-black text-center text-base font-bold">
           오늘 교육 끝내기
         </span>
+        <IconArrowCircleRight />
       </div>
       <div className="text-black text-center text-base font-normal">
         <p>이번 교육도 고생 많으셨습니다.</p>

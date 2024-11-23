@@ -3,19 +3,19 @@ import CareQuestionCard from "../components/CareQuestionCard";
 import RecordedContent from "../components/RecordedContent";
 import RecordingStatus from "../components/RecordingStatus";
 import SummaryButton from "../components/SummaryButton";
-import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createFileRoute("/memoo/$id")({
-  component: Memo,
+export const Route = createFileRoute("/care-memo/$id")({
+  component: CareMemo,
 });
 
-function Memo() {
+function CareMemo() {
   const [recording, setRecording] = useState(false);
   const [recordedContent, setRecordedContent] = useState("");
   const [showRecordedContent, setShowRecordedContent] = useState(false);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
+  const id = 1;
 
   const question =
     "오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 것은 무엇인가요? 질문이 길어진면 내용이 어떻게 들어가나요?";
@@ -40,8 +40,7 @@ function Memo() {
 
   return (
     <div>
-      <BeforeHeader to={"/"} />
-      <Tabs />
+      <BeforeHeader to={`/edu/${id}`} text="뒤로가기" isModalActive />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (
           <CareQuestionCard

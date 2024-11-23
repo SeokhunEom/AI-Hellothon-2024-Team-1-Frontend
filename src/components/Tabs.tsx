@@ -17,7 +17,7 @@ function Tabs() {
   };
 
   return (
-    <div className="mt-4 flex items-center justify-start gap-1">
+    <div className="mt-4 flex items-center justify-start gap-3">
       {TABS.map((tab) => (
         <Link
           key={tab.path}

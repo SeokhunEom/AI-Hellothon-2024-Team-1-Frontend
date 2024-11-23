@@ -36,11 +36,7 @@ const IndexCardMock = [
 function Index() {
   return (
     <div>
-      <Header
-        title="샘 : 기억을 담다"
-        userName={userMock.name}
-        userAvatar={userMock.avatar}
-      />
+      <Header isSam userName={userMock.name} userAvatar={userMock.avatar} />
       <main className="flex flex-col items-end gap-6">
         <Link to={`/memo/${userMock.id}`}>
           <Button icon={<IconPlus />} size="xl">

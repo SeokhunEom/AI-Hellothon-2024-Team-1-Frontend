@@ -1,9 +1,13 @@
+import IconFile from "../assets/iconFile.svg?react";
+import IconFileGray from "../assets/iconFileGray.svg?react";
+import { Link } from "@tanstack/react-router";
+import ReportButton from "./ReportButton";
 import { Steps } from "antd";
 
 interface CareCardProps {
   name: string;
   age: number;
-  gender: "남" | "여";
+  gender: string;
   currentSession: number;
   totalSessions: number;
   progress: {
@@ -29,7 +33,7 @@ function CareCard({
   };
 
   return (
-    <div className="inline-flex h-60 w-full flex-col items-start justify-start gap-8 rounded-xl bg-black-1 p-4">
+    <div className="inline-flex w-full flex-col items-start justify-start gap-8 rounded-xl bg-black-1 p-4">
       <div className="inline-flex w-full items-start justify-between">
         <div className="inline-flex flex-col items-start gap-4">
           <div className="inline-flex items-center gap-2">
@@ -42,15 +46,17 @@ function CareCard({
             {currentSession}/{totalSessions}회차 진행중
           </div>
         </div>
-        <button className="bg-neutral-100 flex items-center gap-1 rounded border border-black-13 p-3">
-          <span className="text-base font-semibold text-black-13">
-            주간보고서
-          </span>
-        </button>
+        <Link to={"/report/$id"} params={{ id: "1" }}>
+          <ReportButton
+            text="주간보고서"
+            icon={currentSession !== 3 ? <IconFileGray /> : <IconFile />}
+            disabled={currentSession !== 3}
+          />
+        </Link>
       </div>
-
-      <div className="flex h-24 w-full flex-col justify-center">
+      <div className="flex w-full flex-col justify-center">
         <Steps
+          labelPlacement="vertical"
           current={getCurrentStep()}
           items={[
             {

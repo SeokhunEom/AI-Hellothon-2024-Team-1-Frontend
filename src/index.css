@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 .ibm-plex-sans-kr-light {
   font-family: "IBM Plex Sans KR", sans-serif;
   font-weight: 300;

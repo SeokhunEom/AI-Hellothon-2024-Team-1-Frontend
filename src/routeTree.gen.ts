@@ -13,12 +13,13 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ReportIdImport } from './routes/report.$id'
 import { Route as ReadyIdImport } from './routes/ready.$id'
-import { Route as MemooIdImport } from './routes/memoo.$id'
 import { Route as MemoIdImport } from './routes/memo.$id'
 import { Route as MakeIdImport } from './routes/make.$id'
 import { Route as HistoryIdImport } from './routes/history.$id'
 import { Route as EduIdImport } from './routes/edu.$id'
+import { Route as CareMemoIdImport } from './routes/care-memo.$id'
 
 // Create Virtual Routes
 
@@ -39,15 +40,15 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const ReadyIdRoute = ReadyIdImport.update({
-  id: '/ready/$id',
-  path: '/ready/$id',
+const ReportIdRoute = ReportIdImport.update({
+  id: '/report/$id',
+  path: '/report/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
-const MemooIdRoute = MemooIdImport.update({
-  id: '/memoo/$id',
-  path: '/memoo/$id',
+const ReadyIdRoute = ReadyIdImport.update({
+  id: '/ready/$id',
+  path: '/ready/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -75,6 +76,12 @@ const EduIdRoute = EduIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const CareMemoIdRoute = CareMemoIdImport.update({
+  id: '/care-memo/$id',
+  path: '/care-memo/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -91,6 +98,13 @@ declare module '@tanstack/react-router' {
       path: '/care'
       fullPath: '/care'
       preLoaderRoute: typeof CareLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/care-memo/$id': {
+      id: '/care-memo/$id'
+      path: '/care-memo/$id'
+      fullPath: '/care-memo/$id'
+      preLoaderRoute: typeof CareMemoIdImport
       parentRoute: typeof rootRoute
     }
     '/edu/$id': {
@@ -121,18 +135,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MemoIdImport
       parentRoute: typeof rootRoute
     }
-    '/memoo/$id': {
-      id: '/memoo/$id'
-      path: '/memoo/$id'
-      fullPath: '/memoo/$id'
-      preLoaderRoute: typeof MemooIdImport
-      parentRoute: typeof rootRoute
-    }
     '/ready/$id': {
       id: '/ready/$id'
       path: '/ready/$id'
       fullPath: '/ready/$id'
       preLoaderRoute: typeof ReadyIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/report/$id': {
+      id: '/report/$id'
+      path: '/report/$id'
+      fullPath: '/report/$id'
+      preLoaderRoute: typeof ReportIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -143,35 +157,38 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/care': typeof CareLazyRoute
+  '/care-memo/$id': typeof CareMemoIdRoute
   '/edu/$id': typeof EduIdRoute
   '/history/$id': typeof HistoryIdRoute
   '/make/$id': typeof MakeIdRoute
   '/memo/$id': typeof MemoIdRoute
-  '/memoo/$id': typeof MemooIdRoute
   '/ready/$id': typeof ReadyIdRoute
+  '/report/$id': typeof ReportIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/care': typeof CareLazyRoute
+  '/care-memo/$id': typeof CareMemoIdRoute
   '/edu/$id': typeof EduIdRoute
   '/history/$id': typeof HistoryIdRoute
   '/make/$id': typeof MakeIdRoute
   '/memo/$id': typeof MemoIdRoute
-  '/memoo/$id': typeof MemooIdRoute
   '/ready/$id': typeof ReadyIdRoute
+  '/report/$id': typeof ReportIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/care': typeof CareLazyRoute
+  '/care-memo/$id': typeof CareMemoIdRoute
   '/edu/$id': typeof EduIdRoute
   '/history/$id': typeof HistoryIdRoute
   '/make/$id': typeof MakeIdRoute
   '/memo/$id': typeof MemoIdRoute
-  '/memoo/$id': typeof MemooIdRoute
   '/ready/$id': typeof ReadyIdRoute
+  '/report/$id': typeof ReportIdRoute
 }
 
 export interface FileRouteTypes {
@@ -179,55 +196,60 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/care'
+    | '/care-memo/$id'
     | '/edu/$id'
     | '/history/$id'
     | '/make/$id'
     | '/memo/$id'
-    | '/memoo/$id'
     | '/ready/$id'
+    | '/report/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/care'
+    | '/care-memo/$id'
     | '/edu/$id'
     | '/history/$id'
     | '/make/$id'
     | '/memo/$id'
-    | '/memoo/$id'
     | '/ready/$id'
+    | '/report/$id'
   id:
     | '__root__'
     | '/'
     | '/care'
+    | '/care-memo/$id'
     | '/edu/$id'
     | '/history/$id'
     | '/make/$id'
     | '/memo/$id'
-    | '/memoo/$id'
     | '/ready/$id'
+    | '/report/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   CareLazyRoute: typeof CareLazyRoute
+  CareMemoIdRoute: typeof CareMemoIdRoute
   EduIdRoute: typeof EduIdRoute
   HistoryIdRoute: typeof HistoryIdRoute
   MakeIdRoute: typeof MakeIdRoute
   MemoIdRoute: typeof MemoIdRoute
-  MemooIdRoute: typeof MemooIdRoute
   ReadyIdRoute: typeof ReadyIdRoute
+  ReportIdRoute: typeof ReportIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   CareLazyRoute: CareLazyRoute,
+  CareMemoIdRoute: CareMemoIdRoute,
   EduIdRoute: EduIdRoute,
   HistoryIdRoute: HistoryIdRoute,
   MakeIdRoute: MakeIdRoute,
   MemoIdRoute: MemoIdRoute,
-  MemooIdRoute: MemooIdRoute,
   ReadyIdRoute: ReadyIdRoute,
+  ReportIdRoute: ReportIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -242,12 +264,13 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/care",
+        "/care-memo/$id",
         "/edu/$id",
         "/history/$id",
         "/make/$id",
         "/memo/$id",
-        "/memoo/$id",
-        "/ready/$id"
+        "/ready/$id",
+        "/report/$id"
       ]
     },
     "/": {
@@ -255,6 +278,9 @@ export const routeTree = rootRoute
     },
     "/care": {
       "filePath": "care.lazy.tsx"
+    },
+    "/care-memo/$id": {
+      "filePath": "care-memo.$id.tsx"
     },
     "/edu/$id": {
       "filePath": "edu.$id.tsx"
@@ -268,11 +294,11 @@ export const routeTree = rootRoute
     "/memo/$id": {
       "filePath": "memo.$id.tsx"
     },
-    "/memoo/$id": {
-      "filePath": "memoo.$id.tsx"
-    },
     "/ready/$id": {
       "filePath": "ready.$id.tsx"
+    },
+    "/report/$id": {
+      "filePath": "report.$id.tsx"
     }
   }
 }
