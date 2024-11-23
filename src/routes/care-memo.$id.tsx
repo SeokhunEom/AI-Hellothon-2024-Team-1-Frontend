@@ -61,9 +61,10 @@ function CareMemo() {
           <RecordedContent
             content={recordedContent}
             question={question}
+            isLastQuestion={isLastQuestion}
+            isSam={false}
             onRecordAgain={handleRecordAgain}
             onNextQuestion={handleNextQuestion}
-            isLastQuestion={isLastQuestion}
           />
         )}
         {isLastQuestion && (

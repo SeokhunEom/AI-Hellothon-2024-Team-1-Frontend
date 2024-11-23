@@ -32,7 +32,7 @@ function CareQuestionCard({
         {!isRecording && (
           <BorderButton
             className="w-full"
-            text={"기록 시작하기"}
+            text={"답변 시작하기"}
             onClick={onStartRecording}
             icon={<IconMic />}
           />
@@ -40,7 +40,7 @@ function CareQuestionCard({
         {isRecording && (
           <BorderButton
             className="w-full"
-            text={"기록 종료하기"}
+            text={"답변 종료하기"}
             onClick={onEndRecording}
             icon={<IconPower />}
           />

@@ -73,6 +73,7 @@ function Memo() {
           <RecordedContent
             content={recordedContent}
             question={question}
+            isSam={true}
             onRecordAgain={handleRecordAgain}
             onNextQuestion={handleNextQuestion}
           />

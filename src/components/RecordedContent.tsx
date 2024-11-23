@@ -6,6 +6,7 @@ interface RecordedContentProps {
   content: string;
   question: string;
   isLastQuestion?: boolean;
+  isSam?: boolean;
   onRecordAgain: () => void;
   onNextQuestion: () => void;
 }
@@ -14,6 +15,7 @@ function RecordedContent({
   content,
   question,
   isLastQuestion,
+  isSam,
   onRecordAgain,
   onNextQuestion,
 }: RecordedContentProps) {
@@ -34,7 +36,7 @@ function RecordedContent({
       </div>
       <BorderButton
         className="w-full"
-        text="다시 기록하기"
+        text={isSam ? "다시 기록하기" : "다시 답변하기"}
         onClick={onRecordAgain}
         icon={<IconMic />}
       />
