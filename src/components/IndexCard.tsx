@@ -1,13 +1,16 @@
 import Button from "./Button";
+import IconMaximize from "../assets/iconMaximize.svg?react";
+import { Link } from "@tanstack/react-router";
 import Tag from "./Tag";
 
-interface CardProps {
+interface IndexCardProps {
   title: string;
   tags: string[];
   image: string;
+  cardId: string;
 }
 
-function Card({ title, tags, image }: CardProps) {
+function IndexCard({ title, tags, image, cardId }: IndexCardProps) {
   return (
     <div className="flex flex-col gap-1 space-y-4 rounded-xl bg-black-1 px-6 py-5">
       <div className="flex flex-col gap-8">
@@ -18,9 +21,11 @@ function Card({ title, tags, image }: CardProps) {
               <Tag key={index} label={tag} />
             ))}
           </div>
-          <Button icon="↗" variant="primary">
-            기록보기
-          </Button>
+          <Link to={`/history/${cardId}`}>
+            <Button icon={<IconMaximize />} variant="primary" size="sm">
+              기록보기
+            </Button>
+          </Link>
         </div>
       </div>
       <img
@@ -32,4 +37,4 @@ function Card({ title, tags, image }: CardProps) {
   );
 }
 
-export default Card;
+export default IndexCard;
