@@ -15,7 +15,6 @@ function Memo() {
   const [recording, setRecording] = useState(false);
   const [recordedContent, setRecordedContent] = useState("");
   const [showRecordedContent, setShowRecordedContent] = useState(false);
-  const [isLastQuestion, setIsLastQuestion] = useState(false);
 
   const question =
     "오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 것은 무엇인가요? 질문이 길어진면 내용이 어떻게 들어가나요?";
@@ -31,17 +30,21 @@ function Memo() {
     );
     setRecording(false);
     setShowRecordedContent(true);
-    setIsLastQuestion(true);
+  };
+
+  const handleRecordAgain = () => {
+    setRecording(true);
+    setShowRecordedContent(false);
   };
 
   const handleRefreshQuestion = () => alert("다른 질문 만들어주기");
   const handleReadQuestion = () => alert("질문 읽어주기");
-  const handleRecordAgain = () => setShowRecordedContent(false);
   const handleNextQuestion = () => alert("다음 질문으로 이동");
+  const handleFinishMemo = () => alert("오늘 교육 끝내기");
 
   return (
     <div>
-      <BeforeHeader to={"/"} />
+      <BeforeHeader to={"/"} isModalActive={true} />
       <Tabs />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (
@@ -68,9 +71,7 @@ function Memo() {
             onNextQuestion={handleNextQuestion}
           />
         )}
-        {isLastQuestion && (
-          <MemoFinishButton onClick={() => alert("오늘 교육 끝내기")} />
-        )}
+        {showRecordedContent && <MemoFinishButton onClick={handleFinishMemo} />}
       </div>
     </div>
   );
