@@ -1,21 +1,40 @@
 import { Form, Input, Modal } from "antd";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import BeforeHeader from "../components/BeforeHeader";
 import BorderButton from "../components/BorderButton";
+import { CAREGIVER_TABS } from "../constants/tabs";
 import IconCheckSquare from "../assets/iconCheckSquare.svg?react";
 import IconEdit from "../assets/iconEdit.svg?react";
+import Loading from "../components/Loading";
 import MakeCard from "../components/MakeCard";
+import { Question } from "../types";
 import Tabs from "../components/Tabs";
-import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-export const Route = createFileRoute("/make/$id")({
-  component: Make,
+export const Route = createFileRoute("/caregiver/create")({
+  component: CaregiverCreate,
 });
 
-function Make() {
+function CaregiverCreate() {
+  const { id }: { id: string } = Route.useSearch();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+
+  const { data: questions, isLoading } = useQuery({
+    queryKey: ["questions", id],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://fjtskwttcrchrywg.tunnel-pt.elice.io/questions/record/${id}/questions`,
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch questions");
+      }
+      return response.json() as Promise<Question[]>;
+    },
+  });
 
   const handleAddQuestion = (values: { question: string }) => {
     console.log("New question:", values.question);
@@ -23,34 +42,44 @@ function Make() {
     form.resetFields();
   };
 
+  const handleConfirm = async () => {
+    navigate({ to: "/caregiver/activity", search: { id } });
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
-      <BeforeHeader to={"/care"} />
+      <BeforeHeader to={"/caregiver/home"} />
       <Tabs
         title="김영호"
         subtitle="님"
         activeTab="2"
-        items={[
-          { id: "1", title: "기록준비", path: "/ready/1" },
-          { id: "2", title: "교안제작", path: "/make/1" },
-          { id: "3", title: "인지활동", path: "/edu/1" },
-        ]}
+        items={CAREGIVER_TABS.map((tab) => ({
+          ...tab,
+        }))}
       />
       <div className="mt-6 flex flex-col gap-5">
-        <MakeCard
-          questionNumber={1}
-          question="손주들이랑 주말에 무엇을 하셨나요?"
-        />
-        <MakeCard
-          questionNumber={2}
-          question="손주들이랑 주말에 무엇을 하셨나요?"
-        />
+        {questions?.map((question, index) => (
+          <MakeCard
+            key={question.id}
+            questionNumber={index + 1}
+            question={question.text}
+          />
+        ))}
+
         <BorderButton
           text="직접 질문 추가하기"
           icon={<IconEdit />}
           onClick={() => setIsModalOpen(true)}
         />
-        <BorderButton text="이 교안으로 확정하기" icon={<IconCheckSquare />} />
+        <BorderButton
+          text="이 교안으로 확정하기"
+          icon={<IconCheckSquare />}
+          onClick={() => handleConfirm()}
+        />
       </div>
 
       <Modal

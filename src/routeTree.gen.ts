@@ -15,30 +15,32 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as SeniorRecordImport } from './routes/senior.record'
 import { Route as SeniorMemoriesImport } from './routes/senior.memories'
-import { Route as ReportIdImport } from './routes/report.$id'
-import { Route as ReadyIdImport } from './routes/ready.$id'
-import { Route as MakeIdImport } from './routes/make.$id'
-import { Route as EduIdImport } from './routes/edu.$id'
-import { Route as CareMemoIdImport } from './routes/care-memo.$id'
+import { Route as CaregiverReportImport } from './routes/caregiver.report'
+import { Route as CaregiverRecordImport } from './routes/caregiver.record'
+import { Route as CaregiverReadyImport } from './routes/caregiver.ready'
+import { Route as CaregiverCreateImport } from './routes/caregiver.create'
+import { Route as CaregiverActivityImport } from './routes/caregiver.activity'
 
 // Create Virtual Routes
 
-const CareLazyImport = createFileRoute('/care')()
 const SeniorHomeLazyImport = createFileRoute('/senior/home')()
+const CaregiverHomeLazyImport = createFileRoute('/caregiver/home')()
 
 // Create/Update Routes
-
-const CareLazyRoute = CareLazyImport.update({
-  id: '/care',
-  path: '/care',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/care.lazy').then((d) => d.Route))
 
 const SeniorHomeLazyRoute = SeniorHomeLazyImport.update({
   id: '/senior/home',
   path: '/senior/home',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/senior.home.lazy').then((d) => d.Route))
+
+const CaregiverHomeLazyRoute = CaregiverHomeLazyImport.update({
+  id: '/caregiver/home',
+  path: '/caregiver/home',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/caregiver.home.lazy').then((d) => d.Route),
+)
 
 const SeniorRecordRoute = SeniorRecordImport.update({
   id: '/senior/record',
@@ -52,33 +54,33 @@ const SeniorMemoriesRoute = SeniorMemoriesImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ReportIdRoute = ReportIdImport.update({
-  id: '/report/$id',
-  path: '/report/$id',
+const CaregiverReportRoute = CaregiverReportImport.update({
+  id: '/caregiver/report',
+  path: '/caregiver/report',
   getParentRoute: () => rootRoute,
 } as any)
 
-const ReadyIdRoute = ReadyIdImport.update({
-  id: '/ready/$id',
-  path: '/ready/$id',
+const CaregiverRecordRoute = CaregiverRecordImport.update({
+  id: '/caregiver/record',
+  path: '/caregiver/record',
   getParentRoute: () => rootRoute,
 } as any)
 
-const MakeIdRoute = MakeIdImport.update({
-  id: '/make/$id',
-  path: '/make/$id',
+const CaregiverReadyRoute = CaregiverReadyImport.update({
+  id: '/caregiver/ready',
+  path: '/caregiver/ready',
   getParentRoute: () => rootRoute,
 } as any)
 
-const EduIdRoute = EduIdImport.update({
-  id: '/edu/$id',
-  path: '/edu/$id',
+const CaregiverCreateRoute = CaregiverCreateImport.update({
+  id: '/caregiver/create',
+  path: '/caregiver/create',
   getParentRoute: () => rootRoute,
 } as any)
 
-const CareMemoIdRoute = CareMemoIdImport.update({
-  id: '/care-memo/$id',
-  path: '/care-memo/$id',
+const CaregiverActivityRoute = CaregiverActivityImport.update({
+  id: '/caregiver/activity',
+  path: '/caregiver/activity',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -86,46 +88,39 @@ const CareMemoIdRoute = CareMemoIdImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/care': {
-      id: '/care'
-      path: '/care'
-      fullPath: '/care'
-      preLoaderRoute: typeof CareLazyImport
+    '/caregiver/activity': {
+      id: '/caregiver/activity'
+      path: '/caregiver/activity'
+      fullPath: '/caregiver/activity'
+      preLoaderRoute: typeof CaregiverActivityImport
       parentRoute: typeof rootRoute
     }
-    '/care-memo/$id': {
-      id: '/care-memo/$id'
-      path: '/care-memo/$id'
-      fullPath: '/care-memo/$id'
-      preLoaderRoute: typeof CareMemoIdImport
+    '/caregiver/create': {
+      id: '/caregiver/create'
+      path: '/caregiver/create'
+      fullPath: '/caregiver/create'
+      preLoaderRoute: typeof CaregiverCreateImport
       parentRoute: typeof rootRoute
     }
-    '/edu/$id': {
-      id: '/edu/$id'
-      path: '/edu/$id'
-      fullPath: '/edu/$id'
-      preLoaderRoute: typeof EduIdImport
+    '/caregiver/ready': {
+      id: '/caregiver/ready'
+      path: '/caregiver/ready'
+      fullPath: '/caregiver/ready'
+      preLoaderRoute: typeof CaregiverReadyImport
       parentRoute: typeof rootRoute
     }
-    '/make/$id': {
-      id: '/make/$id'
-      path: '/make/$id'
-      fullPath: '/make/$id'
-      preLoaderRoute: typeof MakeIdImport
+    '/caregiver/record': {
+      id: '/caregiver/record'
+      path: '/caregiver/record'
+      fullPath: '/caregiver/record'
+      preLoaderRoute: typeof CaregiverRecordImport
       parentRoute: typeof rootRoute
     }
-    '/ready/$id': {
-      id: '/ready/$id'
-      path: '/ready/$id'
-      fullPath: '/ready/$id'
-      preLoaderRoute: typeof ReadyIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/report/$id': {
-      id: '/report/$id'
-      path: '/report/$id'
-      fullPath: '/report/$id'
-      preLoaderRoute: typeof ReportIdImport
+    '/caregiver/report': {
+      id: '/caregiver/report'
+      path: '/caregiver/report'
+      fullPath: '/caregiver/report'
+      preLoaderRoute: typeof CaregiverReportImport
       parentRoute: typeof rootRoute
     }
     '/senior/memories': {
@@ -142,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SeniorRecordImport
       parentRoute: typeof rootRoute
     }
+    '/caregiver/home': {
+      id: '/caregiver/home'
+      path: '/caregiver/home'
+      fullPath: '/caregiver/home'
+      preLoaderRoute: typeof CaregiverHomeLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/senior/home': {
       id: '/senior/home'
       path: '/senior/home'
@@ -155,100 +157,100 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/care': typeof CareLazyRoute
-  '/care-memo/$id': typeof CareMemoIdRoute
-  '/edu/$id': typeof EduIdRoute
-  '/make/$id': typeof MakeIdRoute
-  '/ready/$id': typeof ReadyIdRoute
-  '/report/$id': typeof ReportIdRoute
+  '/caregiver/activity': typeof CaregiverActivityRoute
+  '/caregiver/create': typeof CaregiverCreateRoute
+  '/caregiver/ready': typeof CaregiverReadyRoute
+  '/caregiver/record': typeof CaregiverRecordRoute
+  '/caregiver/report': typeof CaregiverReportRoute
   '/senior/memories': typeof SeniorMemoriesRoute
   '/senior/record': typeof SeniorRecordRoute
+  '/caregiver/home': typeof CaregiverHomeLazyRoute
   '/senior/home': typeof SeniorHomeLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/care': typeof CareLazyRoute
-  '/care-memo/$id': typeof CareMemoIdRoute
-  '/edu/$id': typeof EduIdRoute
-  '/make/$id': typeof MakeIdRoute
-  '/ready/$id': typeof ReadyIdRoute
-  '/report/$id': typeof ReportIdRoute
+  '/caregiver/activity': typeof CaregiverActivityRoute
+  '/caregiver/create': typeof CaregiverCreateRoute
+  '/caregiver/ready': typeof CaregiverReadyRoute
+  '/caregiver/record': typeof CaregiverRecordRoute
+  '/caregiver/report': typeof CaregiverReportRoute
   '/senior/memories': typeof SeniorMemoriesRoute
   '/senior/record': typeof SeniorRecordRoute
+  '/caregiver/home': typeof CaregiverHomeLazyRoute
   '/senior/home': typeof SeniorHomeLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/care': typeof CareLazyRoute
-  '/care-memo/$id': typeof CareMemoIdRoute
-  '/edu/$id': typeof EduIdRoute
-  '/make/$id': typeof MakeIdRoute
-  '/ready/$id': typeof ReadyIdRoute
-  '/report/$id': typeof ReportIdRoute
+  '/caregiver/activity': typeof CaregiverActivityRoute
+  '/caregiver/create': typeof CaregiverCreateRoute
+  '/caregiver/ready': typeof CaregiverReadyRoute
+  '/caregiver/record': typeof CaregiverRecordRoute
+  '/caregiver/report': typeof CaregiverReportRoute
   '/senior/memories': typeof SeniorMemoriesRoute
   '/senior/record': typeof SeniorRecordRoute
+  '/caregiver/home': typeof CaregiverHomeLazyRoute
   '/senior/home': typeof SeniorHomeLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/care'
-    | '/care-memo/$id'
-    | '/edu/$id'
-    | '/make/$id'
-    | '/ready/$id'
-    | '/report/$id'
+    | '/caregiver/activity'
+    | '/caregiver/create'
+    | '/caregiver/ready'
+    | '/caregiver/record'
+    | '/caregiver/report'
     | '/senior/memories'
     | '/senior/record'
+    | '/caregiver/home'
     | '/senior/home'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/care'
-    | '/care-memo/$id'
-    | '/edu/$id'
-    | '/make/$id'
-    | '/ready/$id'
-    | '/report/$id'
+    | '/caregiver/activity'
+    | '/caregiver/create'
+    | '/caregiver/ready'
+    | '/caregiver/record'
+    | '/caregiver/report'
     | '/senior/memories'
     | '/senior/record'
+    | '/caregiver/home'
     | '/senior/home'
   id:
     | '__root__'
-    | '/care'
-    | '/care-memo/$id'
-    | '/edu/$id'
-    | '/make/$id'
-    | '/ready/$id'
-    | '/report/$id'
+    | '/caregiver/activity'
+    | '/caregiver/create'
+    | '/caregiver/ready'
+    | '/caregiver/record'
+    | '/caregiver/report'
     | '/senior/memories'
     | '/senior/record'
+    | '/caregiver/home'
     | '/senior/home'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  CareLazyRoute: typeof CareLazyRoute
-  CareMemoIdRoute: typeof CareMemoIdRoute
-  EduIdRoute: typeof EduIdRoute
-  MakeIdRoute: typeof MakeIdRoute
-  ReadyIdRoute: typeof ReadyIdRoute
-  ReportIdRoute: typeof ReportIdRoute
+  CaregiverActivityRoute: typeof CaregiverActivityRoute
+  CaregiverCreateRoute: typeof CaregiverCreateRoute
+  CaregiverReadyRoute: typeof CaregiverReadyRoute
+  CaregiverRecordRoute: typeof CaregiverRecordRoute
+  CaregiverReportRoute: typeof CaregiverReportRoute
   SeniorMemoriesRoute: typeof SeniorMemoriesRoute
   SeniorRecordRoute: typeof SeniorRecordRoute
+  CaregiverHomeLazyRoute: typeof CaregiverHomeLazyRoute
   SeniorHomeLazyRoute: typeof SeniorHomeLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  CareLazyRoute: CareLazyRoute,
-  CareMemoIdRoute: CareMemoIdRoute,
-  EduIdRoute: EduIdRoute,
-  MakeIdRoute: MakeIdRoute,
-  ReadyIdRoute: ReadyIdRoute,
-  ReportIdRoute: ReportIdRoute,
+  CaregiverActivityRoute: CaregiverActivityRoute,
+  CaregiverCreateRoute: CaregiverCreateRoute,
+  CaregiverReadyRoute: CaregiverReadyRoute,
+  CaregiverRecordRoute: CaregiverRecordRoute,
+  CaregiverReportRoute: CaregiverReportRoute,
   SeniorMemoriesRoute: SeniorMemoriesRoute,
   SeniorRecordRoute: SeniorRecordRoute,
+  CaregiverHomeLazyRoute: CaregiverHomeLazyRoute,
   SeniorHomeLazyRoute: SeniorHomeLazyRoute,
 }
 
@@ -262,40 +264,40 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/care",
-        "/care-memo/$id",
-        "/edu/$id",
-        "/make/$id",
-        "/ready/$id",
-        "/report/$id",
+        "/caregiver/activity",
+        "/caregiver/create",
+        "/caregiver/ready",
+        "/caregiver/record",
+        "/caregiver/report",
         "/senior/memories",
         "/senior/record",
+        "/caregiver/home",
         "/senior/home"
       ]
     },
-    "/care": {
-      "filePath": "care.lazy.tsx"
+    "/caregiver/activity": {
+      "filePath": "caregiver.activity.tsx"
     },
-    "/care-memo/$id": {
-      "filePath": "care-memo.$id.tsx"
+    "/caregiver/create": {
+      "filePath": "caregiver.create.tsx"
     },
-    "/edu/$id": {
-      "filePath": "edu.$id.tsx"
+    "/caregiver/ready": {
+      "filePath": "caregiver.ready.tsx"
     },
-    "/make/$id": {
-      "filePath": "make.$id.tsx"
+    "/caregiver/record": {
+      "filePath": "caregiver.record.tsx"
     },
-    "/ready/$id": {
-      "filePath": "ready.$id.tsx"
-    },
-    "/report/$id": {
-      "filePath": "report.$id.tsx"
+    "/caregiver/report": {
+      "filePath": "caregiver.report.tsx"
     },
     "/senior/memories": {
       "filePath": "senior.memories.tsx"
     },
     "/senior/record": {
       "filePath": "senior.record.tsx"
+    },
+    "/caregiver/home": {
+      "filePath": "caregiver.home.lazy.tsx"
     },
     "/senior/home": {
       "filePath": "senior.home.lazy.tsx"

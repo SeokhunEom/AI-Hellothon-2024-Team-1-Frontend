@@ -24,9 +24,8 @@ function SeniorMemories() {
       <BeforeHeader to={"/senior/home"} />
       <Tabs
         activeTab="2"
-        items={MEMORY_TABS.map((tab, index) => ({
+        items={MEMORY_TABS.map((tab) => ({
           ...tab,
-          path: tab.path(index === 0 ? "1" : id),
         }))}
       />
       <div className="mt-4 flex flex-col items-center">

@@ -3,8 +3,8 @@ import ReportContent from "../components/ReportContent";
 import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/report/$id")({
-  component: Report,
+export const Route = createFileRoute("/caregiver/report")({
+  component: CaregiverReport,
 });
 
 const mockReport = [
@@ -33,10 +33,10 @@ const mockReport = [
   },
 ];
 
-function Report() {
+function CaregiverReport() {
   return (
     <div>
-      <BeforeHeader to={"/care"} />
+      <BeforeHeader to={"/caregiver/home"} />
       <Tabs
         title="김영호"
         subtitle="님 주간보고서 (24.11.18 ~ 24.11.25)"

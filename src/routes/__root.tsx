@@ -21,9 +21,9 @@ const ErrorComponent = () => {
 };
 
 const RootComponent = () => {
-  const isIndex = useMatchRoute()({ to: "/senior/home" });
-  const isCare = useMatchRoute()({ to: "/care" });
-  const isHome = isIndex || isCare;
+  const isSeniorHome = useMatchRoute()({ to: "/senior/home" });
+  const isCaregiverHome = useMatchRoute()({ to: "/caregiver/home" });
+  const isHome = isSeniorHome || isCaregiverHome;
 
   return (
     <QueryClientProvider client={queryClient}>

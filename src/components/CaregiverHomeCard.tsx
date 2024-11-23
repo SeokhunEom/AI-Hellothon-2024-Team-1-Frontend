@@ -18,7 +18,7 @@ interface CareCardProps {
   };
 }
 
-function CareCard({
+function CaregiverHomeCard({
   name,
   age,
   gender,
@@ -49,7 +49,7 @@ function CareCard({
             {currentSession}/{totalSessions}회차 진행중
           </div>
         </div>
-        <Link to={"/report/$id"} params={{ id: "1" }}>
+        <Link to={"/caregiver/report"} search={{ id: "1" }}>
           <ReportButton
             text="주간보고서"
             icon={currentSession !== 3 ? <IconFileGray /> : <IconFile />}
@@ -67,21 +67,23 @@ function CareCard({
               description: progress.recordPrep ? "완료" : "시작전",
               status: progress.recordPrep ? "finish" : "wait",
               onClick: () =>
-                navigate({ to: "/ready/$id", params: { id: "1" } }),
+                navigate({ to: "/caregiver/ready", search: { id: "1" } }),
               className: "cursor-pointer",
             },
             {
               title: "교안제작",
               description: progress.materialPrep ? "완료" : "시작전",
               status: progress.materialPrep ? "finish" : "wait",
-              onClick: () => navigate({ to: "/make/$id", params: { id: "1" } }),
+              onClick: () =>
+                navigate({ to: "/caregiver/create", search: { id: "1" } }),
               className: "cursor-pointer",
             },
             {
               title: "인지활동",
               description: progress.education ? "완료" : "시작전",
               status: progress.education ? "finish" : "wait",
-              onClick: () => navigate({ to: "/edu/$id", params: { id: "1" } }),
+              onClick: () =>
+                navigate({ to: "/caregiver/activity", search: { id: "1" } }),
               className: "cursor-pointer",
             },
           ]}
@@ -92,4 +94,4 @@ function CareCard({
   );
 }
 
-export default CareCard;
+export default CaregiverHomeCard;

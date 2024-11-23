@@ -196,9 +196,8 @@ function SeniorRecord() {
       <BeforeHeader to={"/senior/home"} isModalActive={true} />
       <Tabs
         activeTab="1"
-        items={MEMORY_TABS.map((tab, index) => ({
+        items={MEMORY_TABS.map((tab) => ({
           ...tab,
-          path: tab.path(index === 0 ? "1" : id),
         }))}
       />
       <div className="mt-6 flex flex-col gap-10">

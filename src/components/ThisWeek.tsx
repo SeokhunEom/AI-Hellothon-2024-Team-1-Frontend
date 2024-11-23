@@ -5,7 +5,7 @@ interface DateProps {
   endDate: string;
 }
 
-const Date = ({ startDate, endDate }: DateProps) => {
+const ThisWeek = ({ startDate, endDate }: DateProps) => {
   return (
     <div className="inline-flex h-auto items-center justify-start gap-2">
       <div className="flex gap-3 text-center text-xl font-medium text-black-13">
@@ -21,4 +21,4 @@ const Date = ({ startDate, endDate }: DateProps) => {
   );
 };
 
-export default Date;
+export default ThisWeek;

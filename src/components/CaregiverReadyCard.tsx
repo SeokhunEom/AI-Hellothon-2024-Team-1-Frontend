@@ -6,14 +6,23 @@ import ReportButton from "./ReportButton";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
-interface ReadyCardProps {
+interface CaregiverReadyCardProps {
+  recordId: string;
   title: string;
   tags: string[];
   isRecommended?: boolean;
   content: string;
+  image: string;
 }
 
-const ReadyCard = ({ title, tags, isRecommended, content }: ReadyCardProps) => {
+const CaregiverReadyCard = ({
+  recordId,
+  title,
+  tags,
+  isRecommended,
+  content,
+  image,
+}: CaregiverReadyCardProps) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -63,12 +72,13 @@ const ReadyCard = ({ title, tags, isRecommended, content }: ReadyCardProps) => {
             size="grow"
             text="교안 만들기"
             icon={<IconFilePlus />}
-            onClick={() => navigate({ to: "/make/$id", params: { id: "1" } })}
+            onClick={() =>
+              navigate({ to: "/caregiver/create", search: { id: recordId } })
+            }
           />
         </div>
       </div>
       <Modal
-        title={title}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -76,11 +86,7 @@ const ReadyCard = ({ title, tags, isRecommended, content }: ReadyCardProps) => {
       >
         <div className="flex flex-col items-center">
           <div className="w-full">
-            <MemoryCard
-              title="오늘의 기억: 따뜻한 오후 오늘의 기억: 따뜻한 오후오늘의 기억: 따뜻한 오후"
-              imageSrc="https://cdn.pixabay.com/photo/2024/03/08/09/47/ai-generated-8620359_1280.png"
-              description={content}
-            />
+            <MemoryCard title={title} image={image} description={content} />
           </div>
         </div>
       </Modal>
@@ -88,4 +94,4 @@ const ReadyCard = ({ title, tags, isRecommended, content }: ReadyCardProps) => {
   );
 };
 
-export default ReadyCard;
+export default CaregiverReadyCard;

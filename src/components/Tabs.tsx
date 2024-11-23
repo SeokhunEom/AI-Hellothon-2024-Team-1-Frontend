@@ -4,7 +4,7 @@ interface TabItem {
   id: string;
   title?: string;
   subtitle?: string;
-  path: string;
+  path?: string;
 }
 
 interface TabsProps {
@@ -35,25 +35,47 @@ function Tabs({ title, subtitle, activeTab, items }: TabsProps) {
                 : "border-b-2 border-black-1"
             } flex items-center justify-center`}
           >
-            <Link to={item.path} className="text-center">
-              <span
-                className={`${
-                  activeTab === item.id ? "" : "text-black-7"
-                } text-base font-semibold leading-relaxed`}
-              >
-                {item.title}
-                <br />
-              </span>
-              {item.subtitle && (
+            {item.path ? (
+              <Link to={item.path} className="text-center">
                 <span
                   className={`${
                     activeTab === item.id ? "" : "text-black-7"
-                  } text-base font-medium leading-relaxed`}
+                  } text-base font-semibold leading-relaxed`}
                 >
-                  {item.subtitle}
+                  {item.title}
+                  <br />
                 </span>
-              )}
-            </Link>
+                {item.subtitle && (
+                  <span
+                    className={`${
+                      activeTab === item.id ? "" : "text-black-7"
+                    } text-base font-medium leading-relaxed`}
+                  >
+                    {item.subtitle}
+                  </span>
+                )}
+              </Link>
+            ) : (
+              <>
+                <span
+                  className={`${
+                    activeTab === item.id ? "" : "text-black-7"
+                  } text-base font-semibold leading-relaxed`}
+                >
+                  {item.title}
+                  <br />
+                </span>
+                {item.subtitle && (
+                  <span
+                    className={`${
+                      activeTab === item.id ? "" : "text-black-7"
+                    } text-base font-medium leading-relaxed`}
+                  >
+                    {item.subtitle}
+                  </span>
+                )}
+              </>
+            )}
           </div>
         ))}
       </div>

@@ -6,11 +6,11 @@ import SummaryButton from "../components/SummaryButton";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createFileRoute("/care-memo/$id")({
-  component: CareMemo,
+export const Route = createFileRoute("/caregiver/record")({
+  component: CaregiverRecord,
 });
 
-function CareMemo() {
+function CaregiverRecord() {
   const [recording, setRecording] = useState(false);
   const [recordedContent, setRecordedContent] = useState("");
   const [showRecordedContent, setShowRecordedContent] = useState(false);
@@ -40,7 +40,11 @@ function CareMemo() {
 
   return (
     <div>
-      <BeforeHeader to={`/edu/${id}`} text="뒤로가기" isModalActive />
+      <BeforeHeader
+        to={`/caregiver/activity?id=${id}`}
+        text="뒤로가기"
+        isModalActive
+      />
       <div className="mt-6 flex flex-col gap-10">
         {!showRecordedContent && (
           <CareQuestionCard
@@ -61,6 +65,7 @@ function CareMemo() {
           <RecordedContent
             content={recordedContent}
             question={question}
+            questionNumber={1}
             isLastQuestion={isLastQuestion}
             isSam={false}
             onRecordAgain={handleRecordAgain}
