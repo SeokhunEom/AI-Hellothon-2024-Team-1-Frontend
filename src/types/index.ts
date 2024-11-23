@@ -22,6 +22,7 @@ export interface Question {
   text: string;
   id: number;
   created_at?: string;
+  first_answer?: AnswerResponse;
 }
 
 export interface AnswerResponse {

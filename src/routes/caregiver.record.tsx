@@ -11,11 +11,11 @@ export const Route = createFileRoute("/caregiver/record")({
 });
 
 function CaregiverRecord() {
+  const { id }: { id: string } = Route.useSearch();
   const [recording, setRecording] = useState(false);
   const [recordedContent, setRecordedContent] = useState("");
   const [showRecordedContent, setShowRecordedContent] = useState(false);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
-  const id = 1;
 
   const question =
     "오늘 방문한 곳에서 본 색깔 중 가장 아름다웠던 것은 무엇인가요? 질문이 길어진면 내용이 어떻게 들어가나요?";

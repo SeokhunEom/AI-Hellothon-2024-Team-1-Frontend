@@ -30,7 +30,7 @@ function Tabs({ title, subtitle, activeTab, items }: TabsProps) {
           <div
             key={item.id}
             className={`shrink grow basis-0 p-2 ${
-              activeTab === item.id
+              activeTab == item.id
                 ? "border-b-2 border-black-13"
                 : "border-b-2 border-black-1"
             } flex items-center justify-center`}

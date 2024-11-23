@@ -22,8 +22,13 @@ function CaregiverCreate() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const [selectedQuestions, setSelectedQuestions] = useState<number[]>([]);
 
-  const { data: questions, isLoading } = useQuery({
+  const {
+    data: questions,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["questions", id],
     queryFn: async () => {
       const response = await fetch(
@@ -36,14 +41,76 @@ function CaregiverCreate() {
     },
   });
 
-  const handleAddQuestion = (values: { question: string }) => {
-    console.log("New question:", values.question);
-    setIsModalOpen(false);
-    form.resetFields();
+  const handleAddQuestion = async (values: { question: string }) => {
+    try {
+      const response = await fetch(
+        `https://fjtskwttcrchrywg.tunnel-pt.elice.io/questions/?record_id=${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: values.question,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to add question");
+      }
+
+      setIsModalOpen(false);
+      form.resetFields();
+      refetch();
+    } catch (error) {
+      console.error("Error adding question:", error);
+    }
+  };
+
+  const handleQuestionSelect = (questionId: number) => {
+    setSelectedQuestions((prev) =>
+      prev.includes(questionId)
+        ? prev.filter((id) => id !== questionId)
+        : [...prev, questionId],
+    );
   };
 
   const handleConfirm = async () => {
-    navigate({ to: "/caregiver/activity", search: { id } });
+    if (selectedQuestions.length === 0) {
+      Modal.warning({ title: "질문을 선택해주세요." });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "https://fjtskwttcrchrywg.tunnel-pt.elice.io/guides/create_with_questions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            elder_id: 1,
+            title: "새로운 교안",
+            question_ids: selectedQuestions,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create guide");
+      }
+
+      const data = await response.json();
+      navigate({
+        to: "/caregiver/activity",
+        search: { id: data.id.toString() },
+      });
+    } catch (error) {
+      console.error("Error creating guide:", error);
+      Modal.error({ title: "교안 생성에 실패했습니다." });
+    }
   };
 
   if (isLoading) {
@@ -67,6 +134,9 @@ function CaregiverCreate() {
             key={question.id}
             questionNumber={index + 1}
             question={question.text}
+            questionId={question.id}
+            isSelected={selectedQuestions.includes(question.id)}
+            onSelect={handleQuestionSelect}
           />
         ))}
 

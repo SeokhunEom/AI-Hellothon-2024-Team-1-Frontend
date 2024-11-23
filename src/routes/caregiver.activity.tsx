@@ -5,14 +5,38 @@ import BorderButton from "../components/BorderButton";
 import { CAREGIVER_TABS } from "../constants/tabs";
 import EduCard from "../components/EduCard";
 import IconChevron from "../assets/iconChevron.svg?react";
+import { Question } from "../types";
 import Tabs from "../components/Tabs";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/caregiver/activity")({
   component: CaregiverActivity,
 });
 
+const fetchQuestions = async (id: string): Promise<Question[]> => {
+  const response = await fetch(
+    `https://fjtskwttcrchrywg.tunnel-pt.elice.io/guides/${id}/questions`,
+  );
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
 function CaregiverActivity() {
-  const id = "1";
+  const { id }: { id: string } = Route.useSearch();
+
+  const {
+    data: questions = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["questions", id],
+    queryFn: () => fetchQuestions(id),
+  });
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (error) return <div>에러가 발생했습니다</div>;
 
   return (
     <div>
@@ -33,16 +57,14 @@ function CaregiverActivity() {
             className="w-full"
           />
         </Link>
-        <EduCard
-          questionNumber={1}
-          question="손주들이랑 주말에 무엇을 하셨나요?"
-          answer="손주들이랑 함께 앨범을 보며 옛날 사진 이야기를 나눴어요. 사진 속 이야기를 하다 보니 웃을 일도 많았고, 재미있었어요."
-        />
-        <EduCard
-          questionNumber={2}
-          question="손주들이랑 주말에 무엇을 하셨나요?"
-          answer="손주들이랑 함께 앨범을 보며 옛날 사진 이야기를 나눴어요. 사진 속 이야기를 하다 보니 웃을 일도 많았고, 재미있었어요."
-        />
+        {questions.map((question, index) => (
+          <EduCard
+            key={question.id}
+            questionNumber={index + 1}
+            question={question.text}
+            answer={question.first_answer?.response || "아직 답변이 없습니다."}
+          />
+        ))}
       </div>
     </div>
   );

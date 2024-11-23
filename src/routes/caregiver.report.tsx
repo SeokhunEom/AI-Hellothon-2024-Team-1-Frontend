@@ -1,61 +1,76 @@
+import { useEffect, useState } from "react";
+
 import BeforeHeader from "../components/BeforeHeader";
 import ReportContent from "../components/ReportContent";
 import Tabs from "../components/Tabs";
 import { createFileRoute } from "@tanstack/react-router";
 
+interface Analysis {
+  id: number;
+  question: string;
+  first_answer: string;
+  last_answer: string;
+  similarity: number;
+}
+
+interface Report {
+  id: number;
+  elder_id: number;
+  analyses: Analysis[];
+  created_at: string;
+}
+
 export const Route = createFileRoute("/caregiver/report")({
   component: CaregiverReport,
 });
 
-const mockReport = [
-  {
-    questionNumber: 1,
-    question: "오늘의 따뜻한 기억",
-    similarity: 87,
-    ssamAnswer:
-      "오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다. 오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다. 오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다. 오늘의 따뜻한 기억 : 해질녁 해의 색깔...",
-    samAnswer:
-      "오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다. 오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다. 오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다. 오늘의 따뜻한 기억 : 해질녁 해의 색깔...",
-  },
-  {
-    questionNumber: 2,
-    question: "오늘의 따뜻한 기억",
-    similarity: 92,
-    ssamAnswer: "오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다...",
-    samAnswer: "오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다...",
-  },
-  {
-    questionNumber: 3,
-    question: "오늘의 따뜻한 기억",
-    similarity: 78,
-    ssamAnswer: "오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다...",
-    samAnswer: "오늘의 따뜻한 기억 : 해질녁 해의 색깔이 너무 아름답다...",
-  },
-];
-
 function CaregiverReport() {
+  const [reports, setReports] = useState<Report[]>([]);
+  const { trial, id = "1" }: { trial: string; id: string } = Route.useSearch();
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch(
+          `https://fjtskwttcrchrywg.tunnel-pt.elice.io/reports/?elder_id=${id}&year=2024&week_number=47`,
+        );
+        const data = await response.json();
+        setReports(data);
+      } catch (error) {
+        console.error("Failed to fetch reports:", error);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  const currentReport = reports.find(
+    (_, index) => index === parseInt(trial) - 1,
+  );
+
   return (
     <div>
       <BeforeHeader to={"/caregiver/home"} />
       <Tabs
         title="김영호"
-        subtitle="님 주간보고서 (24.11.18 ~ 24.11.25)"
-        activeTab="1"
-        items={[
-          { id: "1", title: "1회차", subtitle: "11.18", path: "/path1" },
-          { id: "2", title: "2회차", subtitle: "11.20", path: "/path2" },
-          { id: "3", title: "3회차", subtitle: "11.23", path: "/path3" },
-        ]}
+        subtitle="님 주간보고서 (24.11.18 ~ 24.11.24)"
+        activeTab={trial}
+        items={reports.slice(0, 3).map((_, index) => ({
+          id: (index + 1).toString(),
+          title: `${index + 1}회차`,
+          subtitle: `${new Date(reports[index].created_at).getMonth() + 1}.${new Date(reports[index].created_at).getDate()}`,
+          path: `?trial=${index + 1}`,
+        }))}
       />
       <div className="mt-6 flex flex-col gap-5">
-        {mockReport.map((report) => (
+        {currentReport?.analyses.map((analysis, index) => (
           <ReportContent
-            key={report.questionNumber}
-            questionNumber={report.questionNumber}
-            question={report.question}
-            similarity={report.similarity}
-            ssamAnswer={report.ssamAnswer}
-            samAnswer={report.samAnswer}
+            key={analysis.id}
+            questionNumber={index + 1}
+            question={analysis.question}
+            similarity={analysis.similarity}
+            ssamAnswer={analysis.first_answer}
+            samAnswer={analysis.last_answer}
           />
         ))}
       </div>

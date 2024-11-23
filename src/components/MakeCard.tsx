@@ -3,12 +3,23 @@ import { Checkbox } from "antd";
 interface MakeCardProps {
   questionNumber: number;
   question: string;
+  questionId: number;
+  isSelected: boolean;
+  onSelect: (id: number) => void;
 }
 
-const MakeCard = ({ questionNumber, question }: MakeCardProps) => {
+const MakeCard = ({
+  questionNumber,
+  question,
+  questionId,
+  isSelected,
+  onSelect,
+}: MakeCardProps) => {
   return (
     <div className="inline-flex items-start justify-end gap-4 rounded-xl bg-black-3 p-5">
       <Checkbox
+        checked={isSelected}
+        onChange={() => onSelect(questionId)}
         style={{
           transform: "scale(1.5)",
           marginRight: "12px",
