@@ -16,7 +16,7 @@ function MemoryCard({ date, title, image, description }: MemoryCardProps) {
         )}
         <div className="text-xl font-semibold">{title}</div>
       </div>
-      <img className="ma h-80 w-full object-cover" src={image} alt="Memory" />
+      <img className="h-80 w-full object-cover" src={image} alt="Memory" />
       <p className="text-lg font-medium leading-8">{description}</p>
     </div>
   );

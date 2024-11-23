@@ -9,9 +9,9 @@ export interface UserResponse {
 }
 
 export interface RecordResponse {
+  id: number;
   title: string;
   content: string;
-  id: number;
   elder_id: number;
   created_at: string;
   image: string | null;
@@ -21,7 +21,7 @@ export interface RecordResponse {
 export interface Question {
   text: string;
   id: number;
-  created_at: string;
+  created_at?: string;
 }
 
 export interface AnswerResponse {

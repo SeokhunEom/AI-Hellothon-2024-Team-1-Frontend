@@ -3,7 +3,7 @@ import IconArrowSquareRight from "../assets/iconArrowSquareRight.svg?react";
 import IconMic from "../assets/iconMic.svg?react";
 
 interface RecordedContentProps {
-  content: string;
+  content: React.ReactNode;
   question: string;
   questionNumber: number;
   isLastQuestion?: boolean;

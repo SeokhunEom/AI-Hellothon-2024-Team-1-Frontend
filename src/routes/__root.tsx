@@ -11,8 +11,17 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 const queryClient = new QueryClient();
 
+const ErrorComponent = () => {
+  return (
+    <div className="flex h-screen flex-col items-center justify-center">
+      <h1 className="text-white text-2xl font-bold">오류가 발생했습니다.</h1>
+      <p className="text-gray-400 mt-2">잠시 후 다시 시도해주세요</p>
+    </div>
+  );
+};
+
 const RootComponent = () => {
-  const isIndex = useMatchRoute()({ to: "/" });
+  const isIndex = useMatchRoute()({ to: "/senior/home" });
   const isCare = useMatchRoute()({ to: "/care" });
   const isHome = isIndex || isCare;
 
@@ -20,7 +29,7 @@ const RootComponent = () => {
     <QueryClientProvider client={queryClient}>
       <div className="bg-black-7">
         <div
-          className={`m-auto min-h-screen max-w-[500px] ${isHome ? "bg-black-3" : "bg-black-1"} px-5 py-16`}
+          className={`m-auto min-h-screen max-w-[500px] ${isHome ? "bg-black-3" : "bg-black-1"} px-5 py-12`}
         >
           <ScrollRestoration />
           <Outlet />
@@ -34,4 +43,5 @@ const RootComponent = () => {
 
 export const Route = createRootRoute({
   component: RootComponent,
+  errorComponent: ErrorComponent,
 });
