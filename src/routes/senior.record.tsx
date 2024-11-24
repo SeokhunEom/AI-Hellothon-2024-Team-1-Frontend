@@ -24,7 +24,6 @@ function SeniorRecord() {
     setCurrentQuestion,
     answers,
     addAnswer,
-    resetAnswers,
     addAnsweredQuestionId,
     answeredQuestionIds,
     clearAnsweredQuestionIds,
@@ -53,9 +52,6 @@ function SeniorRecord() {
   });
 
   useEffect(() => {
-    resetQuestionNumber();
-    resetAnswers();
-    clearAnsweredQuestionIds();
     setResultLoading(false);
 
     if ("webkitSpeechRecognition" in window) {

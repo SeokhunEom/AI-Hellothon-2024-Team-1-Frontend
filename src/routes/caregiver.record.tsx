@@ -21,13 +21,10 @@ function CaregiverRecord() {
     currentQuestion,
     setCurrentQuestion,
     addAnswer,
-    resetAnswers,
     addAnsweredQuestionId,
     answeredQuestionIds,
-    clearAnsweredQuestionIds,
     currentQuestionNumber,
     incrementQuestionNumber,
-    resetQuestionNumber,
   } = useCaregiverMemoStore();
 
   const { id, userId }: { id: string; userId: string } = Route.useSearch();
@@ -43,9 +40,6 @@ function CaregiverRecord() {
   const [previousTranscripts, setPreviousTranscripts] = useState("");
 
   useEffect(() => {
-    resetQuestionNumber();
-    resetAnswers();
-    clearAnsweredQuestionIds();
     if (questions.length > 0) {
       setCurrentQuestion(questions[0]);
     }
