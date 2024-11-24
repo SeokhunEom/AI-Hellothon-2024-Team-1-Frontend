@@ -40,10 +40,12 @@ function CaregiverRecord() {
   const [previousTranscripts, setPreviousTranscripts] = useState("");
 
   useEffect(() => {
-    if (questions.length > 0) {
-      setCurrentQuestion(questions[0]);
+    if (currentQuestionNumber <= questions.length) {
+      setCurrentQuestion(questions[currentQuestionNumber - 1]);
     }
+  }, [currentQuestionNumber]);
 
+  useEffect(() => {
     if ("webkitSpeechRecognition" in window) {
       const recognition = new webkitSpeechRecognition();
       recognition.continuous = true;
@@ -164,9 +166,6 @@ function CaregiverRecord() {
 
   const handleNextQuestion = () => {
     incrementQuestionNumber();
-    if (currentQuestionNumber < questions.length) {
-      setCurrentQuestion(questions[currentQuestionNumber]);
-    }
     setShowRecordedContent(false);
     setRecordedContent("");
   };
